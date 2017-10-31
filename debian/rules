@@ -1,0 +1,32 @@
+#!/usr/bin/make -f
+
+%:
+	dh $@
+
+override_dh_install:
+	dh_install
+
+	# Copy libs into usr/lib/spark2/
+	cp -rv $(CURDIR)/jars/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
+	cp -rv $(CURDIR)/R/* $(CURDIR)/debian/spark2/usr/lib/spark2/R/
+	cp -rv $(CURDIR)/yarn/* 	$(CURDIR)/debian/spark2/usr/lib/spark2/yarn/
+	# (Avoid copying python test files by specifying the files we want from python/ directory.)
+	cp -rv $(CURDIR)/python/docs $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+	cp -rv $(CURDIR)/python/lib $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+	cp -rv $(CURDIR)/python/pyspark $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+	cp -rv $(CURDIR)/python/MANIFEST.in $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+	cp -rv $(CURDIR)/python/pylintrc $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+	cp -rv $(CURDIR)/python/README.md $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+	cp -rv $(CURDIR)/python/setup.cfg $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+	cp -rv $(CURDIR)/python/setup.py $(CURDIR)/debian/spark2/usr/lib/spark2/python/
+
+	# Copy desired bin scripts
+	cp -v $(CURDIR)/bin/beeline           $(CURDIR)/debian/spark2/usr/lib/spark2/bin/beeline
+	cp -v $(CURDIR)/bin/find-spark-home   $(CURDIR)/debian/spark2/usr/lib/spark2/bin/find-spark-home
+	cp -v $(CURDIR)/bin/load-spark-env.sh $(CURDIR)/debian/spark2/usr/lib/spark2/bin/load-spark-env.sh
+	cp -v $(CURDIR)/bin/pyspark           $(CURDIR)/debian/spark2/usr/lib/spark2/bin/pyspark
+	cp -v $(CURDIR)/bin/spark-class       $(CURDIR)/debian/spark2/usr/lib/spark2/bin/spark-class
+	cp -v $(CURDIR)/bin/spark-shell       $(CURDIR)/debian/spark2/usr/lib/spark2/bin/spark-shell
+	cp -v $(CURDIR)/bin/spark-sql         $(CURDIR)/debian/spark2/usr/lib/spark2/bin/spark-sql
+	cp -v $(CURDIR)/bin/spark-submit      $(CURDIR)/debian/spark2/usr/lib/spark2/bin/spark-submit
+	cp -v $(CURDIR)/bin/sparkR            $(CURDIR)/debian/spark2/usr/lib/spark2/bin/sparkR

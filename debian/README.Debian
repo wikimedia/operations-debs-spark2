@@ -1,0 +1,23 @@
+Druid for Debian
+----------------
+
+This package is created from the release tarballs provided from
+https://spark.apache.org/downloads.html. It does not build Spark from source.
+
+This repository was created using git-import-orig:
+
+  VERSION=2.1.2-bin-hadoop2.6
+  gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian ../spark-$VERSION.tgz
+
+You should be able to import a new upstream release using the same command again.
+
+Once you've imported the Spark 2 tarball, you need to explicitly declare all
+binary files that need to be included in the package. The following command should do the trick.
+
+  find {jars,python/lib,yarn,R} -type f -exec file {} \; | grep -v text | awk -F ':' '{print $1}' | sort > debian/source/include-binaries
+
+Finally, to build --include-removal needs to be passed to dpkg-source so that any removed binaries
+will be removed from the source package.  You can do so by passing --source-option="--include-removal"
+to git-buildpackage or dpkg-buildpackage.  On a Wikimedia build server:
+
+  GIT_PBUILDER_AUTOCONF=no DIST=jessie WIKIMEDIA=yes gbp buildpackage -sa -us -uc --git-builder=git-pbuilder --source-option="--include-removal"

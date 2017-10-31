@@ -1,0 +1,9 @@
+debian/bin/spark2-beeline usr/bin
+debian/bin/pyspark2 usr/bin
+debian/bin/spark2-shell usr/bin
+debian/bin/spark2-sql usr/bin
+debian/bin/spark2-submit usr/bin
+debian/bin/spark2R usr/bin
+debian/conf/log4j.properties etc/spark2/conf
+debian/conf/spark-defaults.conf etc/spark2/conf
+debian/conf/spark-env.sh etc/spark2/conf
