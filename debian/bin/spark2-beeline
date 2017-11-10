@@ -1,1 +1,0 @@
-exec /usr/lib/spark2/bin/beeline "$@"

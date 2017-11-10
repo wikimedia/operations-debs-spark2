@@ -69,3 +69,8 @@
 if [ -z "${HADOOP_CONF_DIR}" -a -e "/etc/hadoop/conf" ]; then
   export HADOOP_CONF_DIR=/etc/hadoop/conf
 fi
+
+# If /usr/lib/hadoop/native exists, use Hadoop native libs from there
+if [ -z "${LD_LIBRARY_PATH}" -a -e /usr/lib/hadoop/lib/native ]; then
+    export LD_LIBRARY_PATH=/usr/lib/hadoop/lib/native
+fi

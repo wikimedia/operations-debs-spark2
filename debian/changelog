@@ -1,3 +1,14 @@
+spark2 (2.1.2-bin-hadoop2.6-2) jessie-wikimedia; urgency=low
+
+  * 2.1.2 -2 release for Hadoop 2.6
+  * default log4j improvements
+  * Use Hadoop native libs if they exist
+  * Build spark2-assembly.zip and upload to HDFS and use it
+  * spark2-beeline executable removed
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Tue, 31 Oct 2017 18:04:29 +0000
+
+
 spark2 (2.1.2-bin-hadoop2.6-1) jessie-wikimedia; urgency=low
 
   * 2.1.2 binary release for Hadoop 2.6

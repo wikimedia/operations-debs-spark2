@@ -1,4 +1,4 @@
-Druid for Debian
+Spark2 for Debian
 ----------------
 
 This package is created from the release tarballs provided from
@@ -21,3 +21,9 @@ will be removed from the source package.  You can do so by passing --source-opti
 to git-buildpackage or dpkg-buildpackage.  On a Wikimedia build server:
 
   GIT_PBUILDER_AUTOCONF=no DIST=jessie WIKIMEDIA=yes gbp buildpackage -sa -us -uc --git-builder=git-pbuilder --source-option="--include-removal"
+
+spark2-assembly.zip
+-------------------
+This package builds a spark2-assembly.zip archive from all files in the
+jars directory.  If an HDFS, client is avaliable, spark2-assembly.zip will be
+uploaded to HDFS, and spark-defaults.conf will be configured to use it.

@@ -30,3 +30,8 @@ override_dh_install:
 	cp -v $(CURDIR)/bin/spark-sql         $(CURDIR)/debian/spark2/usr/lib/spark2/bin/spark-sql
 	cp -v $(CURDIR)/bin/spark-submit      $(CURDIR)/debian/spark2/usr/lib/spark2/bin/spark-submit
 	cp -v $(CURDIR)/bin/sparkR            $(CURDIR)/debian/spark2/usr/lib/spark2/bin/sparkR
+
+	# Create a spark2-assembly.zip archive that contains everything in jars/
+	# This can be used for spark.yarn.archive to avoid having to load
+	# all .jar files to HDFS everytime spark is launched.
+	zip -j $(CURDIR)/debian/spark2/usr/lib/spark2/spark2-assembly.zip $(CURDIR)/jars/*

@@ -1,4 +1,3 @@
-debian/bin/spark2-beeline usr/bin
 debian/bin/pyspark2 usr/bin
 debian/bin/spark2-shell usr/bin
 debian/bin/spark2-sql usr/bin
