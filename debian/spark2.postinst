@@ -25,10 +25,19 @@ case "$1" in
         # If /etc/hadoop/conf exists, assume an HDFS client exists and is useable.
         # Automate storing spark2-assembly.jar into HDFS.
         if [ -e /etc/hadoop/conf -a -x $(which hdfs) ]; then
-            sudo -u spark hdfs dfs -mkdir -p /user/spark/share/lib && \
-            sudo -u spark hdfs dfs -put -f /usr/lib/spark2/spark2-assembly.zip /user/spark/share/lib/spark2-assembly.zip && \
-            # Append configuration to spark-defaults.conf to use spark2-assembly.zip
-            echo 'spark.yarn.archive                  hdfs:///user/spark/share/lib/spark2-assembly.zip' >> /etc/spark2/conf/spark-defaults.conf
+            assembly_src_file=/usr/lib/spark2/spark2-assembly.zip
+            assembly_dst_dir=hdfs:///user/spark/share/lib
+            assembly_dst_file=$assembly_dst_dir/spark2-assembly.zip
+            defaults_file=/etc/spark2/conf/spark-defaults.conf
+
+            # Put spark2-assembly.zip into HDFS if it isn't already there.
+            # If you are upgrading spark2, you'll have to do this step manually.
+            (sudo -u spark hdfs dfs -test -e $assembly_dst_file || \
+                (sudo -u spark hdfs dfs -mkdir -p $assembly_dst_dir && sudo -u spark hdfs dfs -put -f $assembly_src_file $assembly_dst_file)
+            ) && \
+            # Append configuration to spark-defaults.conf to use spark2-assembly.zip,
+            # if it isn't already configured to do so.
+            (grep -qE 'spark.yarn.(archive|jars)' $defaults_file || echo 'spark.yarn.archive                  hdfs:///user/spark/share/lib/spark2-assembly.zip' >> $defaults_file)
         fi
 
         # Symlink hive-site.xml into spark2/conf if it exists.

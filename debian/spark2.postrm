@@ -15,14 +15,7 @@ case "$1" in
         # that we should be responsible for removing the spark user here.
 
         # Remove the hive-site.xml symlink if it exists
-        test -e /etc/hive/usr/lib/spark2/conf/hive-site.xml && unlink /etc/hive/usr/lib/spark2/conf/hive-site.xml
-
-        # If /etc/hadoop/conf exists, assume an HDFS client exists and is useable.
-        # Automate removing spark2-assembly.jar into HDFS.
-        if [ -e /etc/hadoop/conf -a -x $(which hdfs) ]; then
-            sudo -u spark hdfs dfs -rm /user/spark/share/lib/spark2-assembly.zip
-        fi
-
+        test -e /etc/spark2/conf/hive-site.xml && unlink /etc/spark2/conf/hive-site.xml
         ;;
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
         ;;

@@ -1,3 +1,11 @@
+spark2 (2.1.2-bin-hadoop2.6-3~jessie1) jessie-wikimedia; urgency=low
+
+  * 2.1.2 -3 release for Hadoop 2.6
+  * Better conditionals in spark2.postinst to do the right things when installing and
+    configuring spark2-assembly.zip in HDFS.
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Fri, 10 Nov 2017 17:24:00 +0000
+
 spark2 (2.1.2-bin-hadoop2.6-2) jessie-wikimedia; urgency=low
 
   * 2.1.2 -2 release for Hadoop 2.6
