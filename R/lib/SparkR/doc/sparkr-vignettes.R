@@ -7,15 +7,22 @@ opts_hooks$set(eval = function(options) {
   }
   options
 })
+r_tmp_dir <- tempdir()
+tmp_arg <- paste0("-Djava.io.tmpdir=", r_tmp_dir)
+sparkSessionConfig <- list(spark.driver.extraJavaOptions = tmp_arg,
+                           spark.executor.extraJavaOptions = tmp_arg)
+old_java_opt <- Sys.getenv("_JAVA_OPTIONS")
+Sys.setenv("_JAVA_OPTIONS" = paste("-XX:-UsePerfData", old_java_opt, sep = " "))
 
 ## ---- message=FALSE------------------------------------------------------
 library(SparkR)
 
 ## ---- include=FALSE------------------------------------------------------
 install.spark()
+sparkR.session(master = "local[1]", sparkConfig = sparkSessionConfig, enableHiveSupport = FALSE)
 
-## ---- message=FALSE, results="hide"--------------------------------------
-sparkR.session()
+## ---- eval=FALSE---------------------------------------------------------
+#  sparkR.session()
 
 ## ------------------------------------------------------------------------
 cars <- cbind(model = rownames(mtcars), mtcars)
@@ -224,26 +231,38 @@ head(carsDF_train)
 count(carsDF_test)
 head(carsDF_test)
 
-## ---- warning=FALSE------------------------------------------------------
-df <- createDataFrame(iris)
-# Create a DataFrame containing two classes
-training <- df[df$Species %in% c("versicolor", "virginica"), ]
-model <- spark.logit(training, Species ~ ., regParam = 0.00042)
+## ------------------------------------------------------------------------
+# load training data and create a DataFrame
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+# fit a Linear SVM classifier model
+model <- spark.svmLinear(training,  Survived ~ ., regParam = 0.01, maxIter = 10)
+summary(model)
+
+## ------------------------------------------------------------------------
+prediction <- predict(model, training)
+
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+model <- spark.logit(training, Survived ~ ., regParam = 0.04741301)
 summary(model)
 
 ## ------------------------------------------------------------------------
 fitted <- predict(model, training)
 
-## ---- warning=FALSE------------------------------------------------------
-df <- createDataFrame(iris)
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
 # Note in this case, Spark infers it is multinomial logistic regression, so family = "multinomial" is optional.
-model <- spark.logit(df, Species ~ ., regParam = 0.056)
+model <- spark.logit(training, Class ~ ., regParam = 0.07815179)
 summary(model)
 
-## ---- warning=FALSE------------------------------------------------------
-df <- createDataFrame(iris)
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
 # fit a Multilayer Perceptron Classification Model
-model <- spark.mlp(df, Species ~ ., blockSize = 128, layers = c(4, 3), solver = "l-bfgs", maxIter = 100, tol = 0.5, stepSize = 1, seed = 1, initialWeights = c(0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 9, 9, 9, 9, 9))
+model <- spark.mlp(training, Survived ~ Age + Sex, blockSize = 128, layers = c(2, 3), solver = "l-bfgs", maxIter = 100, tol = 0.5, stepSize = 1, seed = 1, initialWeights = c( 0, 0, 0, 5, 5, 5, 9, 9, 9))
 
 ## ---- include=FALSE------------------------------------------------------
 ops <- options()
@@ -258,7 +277,7 @@ options(ops)
 
 ## ------------------------------------------------------------------------
 # make predictions use the fitted model
-predictions <- predict(model, df)
+predictions <- predict(model, training)
 head(select(predictions, predictions$prediction))
 
 ## ------------------------------------------------------------------------
@@ -286,6 +305,15 @@ gaussianFitted <- predict(gaussianGLM, carsDF)
 head(select(gaussianFitted, "model", "prediction", "mpg", "wt", "hp"))
 
 ## ------------------------------------------------------------------------
+tweedieGLM1 <- spark.glm(carsDF, mpg ~ wt + hp, family = "tweedie", var.power = 0.0)
+summary(tweedieGLM1)
+
+## ------------------------------------------------------------------------
+tweedieGLM2 <- spark.glm(carsDF, mpg ~ wt + hp, family = "tweedie",
+                         var.power = 1.2, link.power = 0.0)
+summary(tweedieGLM2)
+
+## ------------------------------------------------------------------------
 y <- c(3.0, 6.0, 8.0, 5.0, 7.0)
 x <- c(1.0, 2.0, 3.5, 3.0, 4.0)
 w <- rep(1.0, 5)
@@ -310,6 +338,14 @@ df <- createDataFrame(longley)
 rfModel <- spark.randomForest(df, Employed ~ ., type = "regression", maxDepth = 2, numTrees = 2)
 summary(rfModel)
 predictions <- predict(rfModel, df)
+
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+model <- spark.bisectingKmeans(training, Class ~ Survived, k = 4)
+summary(model)
+fitted <- predict(model, training)
+head(select(fitted, "Class", "prediction"))
 
 ## ------------------------------------------------------------------------
 X1 <- data.frame(V1 = rnorm(4), V2 = rnorm(4))
@@ -353,22 +389,39 @@ head(posterior)
 perplexity <- spark.perplexity(model, corpusDF)
 perplexity
 
-## ------------------------------------------------------------------------
-ratings <- list(list(0, 0, 4.0), list(0, 1, 2.0), list(1, 1, 3.0), list(1, 2, 4.0),
-                list(2, 1, 1.0), list(2, 2, 5.0))
-df <- createDataFrame(ratings, c("user", "item", "rating"))
-model <- spark.als(df, "rating", "user", "item", rank = 10, reg = 0.1, nonnegative = TRUE)
+## ---- eval=FALSE---------------------------------------------------------
+#  ratings <- list(list(0, 0, 4.0), list(0, 1, 2.0), list(1, 1, 3.0), list(1, 2, 4.0),
+#                  list(2, 1, 1.0), list(2, 2, 5.0))
+#  df <- createDataFrame(ratings, c("user", "item", "rating"))
+#  model <- spark.als(df, "rating", "user", "item", rank = 10, reg = 0.1, nonnegative = TRUE)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  stats <- summary(model)
+#  userFactors <- stats$userFactors
+#  itemFactors <- stats$itemFactors
+#  head(userFactors)
+#  head(itemFactors)
+
+## ---- eval=FALSE---------------------------------------------------------
+#  predicted <- predict(model, df)
+#  head(predicted)
 
 ## ------------------------------------------------------------------------
-stats <- summary(model)
-userFactors <- stats$userFactors
-itemFactors <- stats$itemFactors
-head(userFactors)
-head(itemFactors)
+df <- selectExpr(createDataFrame(data.frame(rawItems = c(
+  "T,R,U", "T,S", "V,R", "R,U,T,V", "R,S", "V,S,U", "U,R", "S,T", "V,R", "V,U,S",
+  "T,V,U", "R,V", "T,S", "T,S", "S,T", "S,U", "T,R", "V,R", "S,V", "T,S,U"
+))), "split(rawItems, ',') AS items")
+
+fpm <- spark.fpGrowth(df, minSupport = 0.2, minConfidence = 0.5)
 
 ## ------------------------------------------------------------------------
-predicted <- predict(model, df)
-head(predicted)
+head(spark.freqItemsets(fpm))
+
+## ------------------------------------------------------------------------
+head(spark.associationRules(fpm))
+
+## ------------------------------------------------------------------------
+head(predict(fpm, df))
 
 ## ---- warning=FALSE------------------------------------------------------
 df <- createDataFrame(longley)
@@ -380,9 +433,10 @@ test <- spark.kstest(df, "Armed_Forces", "norm", c(afMean, afStd))
 testSummary <- summary(test)
 testSummary
 
-## ---- warning=FALSE------------------------------------------------------
-irisDF <- createDataFrame(iris)
-gaussianGLM <- spark.glm(irisDF, Sepal_Length ~ Sepal_Width + Species, family = "gaussian")
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+gaussianGLM <- spark.glm(training, Freq ~ Sex + Age, family = "gaussian")
 
 # Save and then load a fitted MLlib model
 modelPath <- tempfile(pattern = "ml", fileext = ".tmp")
@@ -393,11 +447,56 @@ gaussianGLM2 <- read.ml(modelPath)
 summary(gaussianGLM2)
 
 # Check model prediction
-gaussianPredictions <- predict(gaussianGLM2, irisDF)
+gaussianPredictions <- predict(gaussianGLM2, training)
 head(gaussianPredictions)
 
 unlink(modelPath)
 
+## ---- eval=FALSE---------------------------------------------------------
+#  # Create DataFrame representing the stream of input lines from connection
+#  lines <- read.stream("socket", host = hostname, port = port)
+#  
+#  # Split the lines into words
+#  words <- selectExpr(lines, "explode(split(value, ' ')) as word")
+#  
+#  # Generate running word count
+#  wordCounts <- count(groupBy(words, "word"))
+#  
+#  # Start running the query that prints the running counts to the console
+#  query <- write.stream(wordCounts, "console", outputMode = "complete")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  topic <- read.stream("kafka",
+#                       kafka.bootstrap.servers = "host1:port1,host2:port2",
+#                       subscribe = "topic1")
+#  keyvalue <- selectExpr(topic, "CAST(key AS STRING)", "CAST(value AS STRING)")
+
+## ---- eval=FALSE---------------------------------------------------------
+#  noAggDF <- select(where(deviceDataStreamingDf, "signal > 10"), "device")
+#  
+#  # Print new data to console
+#  write.stream(noAggDF, "console")
+#  
+#  # Write new data to Parquet files
+#  write.stream(noAggDF,
+#               "parquet",
+#               path = "path/to/destination/dir",
+#               checkpointLocation = "path/to/checkpoint/dir")
+#  
+#  # Aggregate
+#  aggDF <- count(groupBy(noAggDF, "device"))
+#  
+#  # Print updated aggregations to console
+#  write.stream(aggDF, "console", outputMode = "complete")
+#  
+#  # Have all the aggregates in an in memory table. The query name will be the table name
+#  write.stream(aggDF, "memory", queryName = "aggregates", outputMode = "complete")
+#  
+#  head(sql("select * from aggregates"))
+
 ## ---- echo=FALSE---------------------------------------------------------
 sparkR.session.stop()
+
+## ----cleanup, include=FALSE----------------------------------------------
+SparkR:::uninstallDownloadedSpark()
 

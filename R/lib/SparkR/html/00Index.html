@@ -11,7 +11,7 @@
 <div style="text-align: center;">
 <a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
 <a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
-</div><h2>Documentation for package &lsquo;SparkR&rsquo; version 2.1.2</h2>
+</div><h2>Documentation for package &lsquo;SparkR&rsquo; version 2.2.1</h2>
 
 <ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
 <li><a href="../doc/index.html">User guides, package vignettes and other documentation.</a></li>
@@ -81,9 +81,9 @@
 <tr><td style="width: 25%;"><a href="approxCountDistinct.html">approxCountDistinct-method</a></td>
 <td>Returns the approximate number of distinct items in a group</td></tr>
 <tr><td style="width: 25%;"><a href="approxQuantile.html">approxQuantile</a></td>
-<td>Calculates the approximate quantiles of a numerical column of a SparkDataFrame</td></tr>
+<td>Calculates the approximate quantiles of numerical columns of a SparkDataFrame</td></tr>
 <tr><td style="width: 25%;"><a href="approxQuantile.html">approxQuantile-method</a></td>
-<td>Calculates the approximate quantiles of a numerical column of a SparkDataFrame</td></tr>
+<td>Calculates the approximate quantiles of numerical columns of a SparkDataFrame</td></tr>
 <tr><td style="width: 25%;"><a href="arrange.html">arrange</a></td>
 <td>Arrange Rows by Variables</td></tr>
 <tr><td style="width: 25%;"><a href="arrange.html">arrange-method</a></td>
@@ -110,6 +110,8 @@
 <td>asin</td></tr>
 <tr><td style="width: 25%;"><a href="asin.html">asin-method</a></td>
 <td>asin</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">associationRules-method</a></td>
+<td>FP-growth</td></tr>
 <tr><td style="width: 25%;"><a href="atan.html">atan</a></td>
 <td>atan</td></tr>
 <tr><td style="width: 25%;"><a href="atan.html">atan-method</a></td>
@@ -126,6 +128,10 @@
 <td>avg</td></tr>
 <tr><td style="width: 25%;"><a href="avg.html">avg-method</a></td>
 <td>avg</td></tr>
+<tr><td style="width: 25%;"><a href="awaitTermination.html">awaitTermination</a></td>
+<td>awaitTermination</td></tr>
+<tr><td style="width: 25%;"><a href="awaitTermination.html">awaitTermination-method</a></td>
+<td>awaitTermination</td></tr>
 </table>
 
 <h2><a name="B">-- B --</a></h2>
@@ -143,6 +149,8 @@
 <td>bin</td></tr>
 <tr><td style="width: 25%;"><a href="bin.html">bin-method</a></td>
 <td>bin</td></tr>
+<tr><td style="width: 25%;"><a href="BisectingKMeansModel-class.html">BisectingKMeansModel-class</a></td>
+<td>S4 class that represents a BisectingKMeansModel</td></tr>
 <tr><td style="width: 25%;"><a href="bitwiseNOT.html">bitwiseNOT</a></td>
 <td>bitwiseNOT</td></tr>
 <tr><td style="width: 25%;"><a href="bitwiseNOT.html">bitwiseNOT-method</a></td>
@@ -184,6 +192,10 @@
 <td>Computes the ceiling of the given value</td></tr>
 <tr><td style="width: 25%;"><a href="ceil.html">ceiling-method</a></td>
 <td>Computes the ceiling of the given value</td></tr>
+<tr><td style="width: 25%;"><a href="checkpoint.html">checkpoint</a></td>
+<td>checkpoint</td></tr>
+<tr><td style="width: 25%;"><a href="checkpoint.html">checkpoint-method</a></td>
+<td>checkpoint</td></tr>
 <tr><td style="width: 25%;"><a href="clearCache.html">clearCache</a></td>
 <td>Clear Cache</td></tr>
 <tr><td style="width: 25%;"><a href="clearCache.html">clearCache.default</a></td>
@@ -284,14 +296,16 @@
 <td>Create a SparkDataFrame</td></tr>
 <tr><td style="width: 25%;"><a href="createDataFrame.html">createDataFrame.default</a></td>
 <td>Create a SparkDataFrame</td></tr>
-<tr><td style="width: 25%;"><a href="createExternalTable.html">createExternalTable</a></td>
-<td>Create an external table</td></tr>
-<tr><td style="width: 25%;"><a href="createExternalTable.html">createExternalTable.default</a></td>
-<td>Create an external table</td></tr>
+<tr><td style="width: 25%;"><a href="createExternalTable-deprecated.html">createExternalTable</a></td>
+<td>(Deprecated) Create an external table</td></tr>
+<tr><td style="width: 25%;"><a href="createExternalTable-deprecated.html">createExternalTable.default</a></td>
+<td>(Deprecated) Create an external table</td></tr>
 <tr><td style="width: 25%;"><a href="createOrReplaceTempView.html">createOrReplaceTempView</a></td>
 <td>Creates a temporary view using the given name.</td></tr>
 <tr><td style="width: 25%;"><a href="createOrReplaceTempView.html">createOrReplaceTempView-method</a></td>
 <td>Creates a temporary view using the given name.</td></tr>
+<tr><td style="width: 25%;"><a href="createTable.html">createTable</a></td>
+<td>Creates a table based on the dataset in a data source</td></tr>
 <tr><td style="width: 25%;"><a href="crossJoin.html">crossJoin</a></td>
 <td>CrossJoin</td></tr>
 <tr><td style="width: 25%;"><a href="crossJoin.html">crossJoin-method</a></td>
@@ -304,6 +318,8 @@
 <td>cume_dist</td></tr>
 <tr><td style="width: 25%;"><a href="cume_dist.html">cume_dist-method</a></td>
 <td>cume_dist</td></tr>
+<tr><td style="width: 25%;"><a href="currentDatabase.html">currentDatabase</a></td>
+<td>Returns the current default database</td></tr>
 </table>
 
 <h2><a name="D">-- D --</a></h2>
@@ -447,6 +463,8 @@
 <td>Get fitted result from a k-means model</td></tr>
 <tr><td style="width: 25%;"><a href="fitted.html">fitted-method</a></td>
 <td>Get fitted result from a k-means model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.bisectingKmeans.html">fitted-method</a></td>
+<td>Bisecting K-Means Clustering Model</td></tr>
 <tr><td style="width: 25%;"><a href="floor.html">floor</a></td>
 <td>floor</td></tr>
 <tr><td style="width: 25%;"><a href="floor.html">floor-method</a></td>
@@ -459,10 +477,18 @@
 <td>format_string</td></tr>
 <tr><td style="width: 25%;"><a href="format_string.html">format_string-method</a></td>
 <td>format_string</td></tr>
+<tr><td style="width: 25%;"><a href="FPGrowthModel-class.html">FPGrowthModel-class</a></td>
+<td>S4 class that represents a FPGrowthModel</td></tr>
 <tr><td style="width: 25%;"><a href="freqItems.html">freqItems</a></td>
 <td>Finding frequent items for columns, possibly with false positives</td></tr>
 <tr><td style="width: 25%;"><a href="freqItems.html">freqItems-method</a></td>
 <td>Finding frequent items for columns, possibly with false positives</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">freqItemsets-method</a></td>
+<td>FP-growth</td></tr>
+<tr><td style="width: 25%;"><a href="from_json.html">from_json</a></td>
+<td>from_json</td></tr>
+<tr><td style="width: 25%;"><a href="from_json.html">from_json-method</a></td>
+<td>from_json</td></tr>
 <tr><td style="width: 25%;"><a href="from_unixtime.html">from_unixtime</a></td>
 <td>from_unixtime</td></tr>
 <tr><td style="width: 25%;"><a href="from_unixtime.html">from_unixtime-method</a></td>
@@ -541,6 +567,10 @@
 <td>hex</td></tr>
 <tr><td style="width: 25%;"><a href="hex.html">hex-method</a></td>
 <td>hex</td></tr>
+<tr><td style="width: 25%;"><a href="hint.html">hint</a></td>
+<td>hint</td></tr>
+<tr><td style="width: 25%;"><a href="hint.html">hint-method</a></td>
+<td>hint</td></tr>
 <tr><td style="width: 25%;"><a href="histogram.html">histogram</a></td>
 <td>Compute histogram statistics for given column</td></tr>
 <tr><td style="width: 25%;"><a href="histogram.html">histogram-method</a></td>
@@ -584,6 +614,10 @@
 <td>is.nan</td></tr>
 <tr><td style="width: 25%;"><a href="is.nan.html">is.nan-method</a></td>
 <td>is.nan</td></tr>
+<tr><td style="width: 25%;"><a href="isActive.html">isActive</a></td>
+<td>isActive</td></tr>
+<tr><td style="width: 25%;"><a href="isActive.html">isActive-method</a></td>
+<td>isActive</td></tr>
 <tr><td style="width: 25%;"><a href="isLocal.html">isLocal</a></td>
 <td>isLocal</td></tr>
 <tr><td style="width: 25%;"><a href="isLocal.html">isLocal-method</a></td>
@@ -600,6 +634,10 @@
 <td>A set of operations working with SparkDataFrame columns</td></tr>
 <tr><td style="width: 25%;"><a href="IsotonicRegressionModel-class.html">IsotonicRegressionModel-class</a></td>
 <td>S4 class that represents an IsotonicRegressionModel</td></tr>
+<tr><td style="width: 25%;"><a href="isStreaming.html">isStreaming</a></td>
+<td>isStreaming</td></tr>
+<tr><td style="width: 25%;"><a href="isStreaming.html">isStreaming-method</a></td>
+<td>isStreaming</td></tr>
 </table>
 
 <h2><a name="J">-- J --</a></h2>
@@ -639,6 +677,10 @@
 <td>last</td></tr>
 <tr><td style="width: 25%;"><a href="last.html">last-method</a></td>
 <td>last</td></tr>
+<tr><td style="width: 25%;"><a href="lastProgress.html">lastProgress</a></td>
+<td>lastProgress</td></tr>
+<tr><td style="width: 25%;"><a href="lastProgress.html">lastProgress-method</a></td>
+<td>lastProgress</td></tr>
 <tr><td style="width: 25%;"><a href="last_day.html">last_day</a></td>
 <td>last_day</td></tr>
 <tr><td style="width: 25%;"><a href="last_day.html">last_day-method</a></td>
@@ -667,6 +709,16 @@
 <td>Limit</td></tr>
 <tr><td style="width: 25%;"><a href="limit.html">limit-method</a></td>
 <td>Limit</td></tr>
+<tr><td style="width: 25%;"><a href="LinearSVCModel-class.html">LinearSVCModel-class</a></td>
+<td>S4 class that represents an LinearSVCModel</td></tr>
+<tr><td style="width: 25%;"><a href="listColumns.html">listColumns</a></td>
+<td>Returns a list of columns for the given table/view in the specified database</td></tr>
+<tr><td style="width: 25%;"><a href="listDatabases.html">listDatabases</a></td>
+<td>Returns a list of databases available</td></tr>
+<tr><td style="width: 25%;"><a href="listFunctions.html">listFunctions</a></td>
+<td>Returns a list of functions registered in the specified database</td></tr>
+<tr><td style="width: 25%;"><a href="listTables.html">listTables</a></td>
+<td>Returns a list of tables or views in the specified database</td></tr>
 <tr><td style="width: 25%;"><a href="lit.html">lit</a></td>
 <td>lit</td></tr>
 <tr><td style="width: 25%;"><a href="lit.html">lit-method</a></td>
@@ -863,6 +915,10 @@
 <td>Makes predictions from a MLlib model</td></tr>
 <tr><td style="width: 25%;"><a href="spark.als.html">predict-method</a></td>
 <td>Alternating Least Squares (ALS) for Collaborative Filtering</td></tr>
+<tr><td style="width: 25%;"><a href="spark.bisectingKmeans.html">predict-method</a></td>
+<td>Bisecting K-Means Clustering Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">predict-method</a></td>
+<td>FP-growth</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gaussianMixture.html">predict-method</a></td>
 <td>Multivariate Gaussian Mixture Model (GMM)</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gbt.html">predict-method</a></td>
@@ -883,6 +939,8 @@
 <td>Random Forest Model for Regression and Classification</td></tr>
 <tr><td style="width: 25%;"><a href="spark.survreg.html">predict-method</a></td>
 <td>Accelerated Failure Time (AFT) Survival Regression Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.svmLinear.html">predict-method</a></td>
+<td>Linear SVM Model</td></tr>
 <tr><td style="width: 25%;"><a href="print.jobj.html">print.jobj</a></td>
 <td>Print a JVM object reference.</td></tr>
 <tr><td style="width: 25%;"><a href="print.structField.html">print.structField</a></td>
@@ -914,6 +972,10 @@
 <td>quarter</td></tr>
 <tr><td style="width: 25%;"><a href="quarter.html">quarter-method</a></td>
 <td>quarter</td></tr>
+<tr><td style="width: 25%;"><a href="queryName.html">queryName</a></td>
+<td>queryName</td></tr>
+<tr><td style="width: 25%;"><a href="queryName.html">queryName-method</a></td>
+<td>queryName</td></tr>
 </table>
 
 <h2><a name="R">-- R --</a></h2>
@@ -965,10 +1027,18 @@
 <td>Create a SparkDataFrame from a Parquet file.</td></tr>
 <tr><td style="width: 25%;"><a href="read.parquet.html">read.parquet.default</a></td>
 <td>Create a SparkDataFrame from a Parquet file.</td></tr>
+<tr><td style="width: 25%;"><a href="read.stream.html">read.stream</a></td>
+<td>Load a streaming SparkDataFrame</td></tr>
 <tr><td style="width: 25%;"><a href="read.text.html">read.text</a></td>
 <td>Create a SparkDataFrame from a text file.</td></tr>
 <tr><td style="width: 25%;"><a href="read.text.html">read.text.default</a></td>
 <td>Create a SparkDataFrame from a text file.</td></tr>
+<tr><td style="width: 25%;"><a href="recoverPartitions.html">recoverPartitions</a></td>
+<td>Recovers all the partitions in the directory of a table and update the catalog</td></tr>
+<tr><td style="width: 25%;"><a href="refreshByPath.html">refreshByPath</a></td>
+<td>Invalidates and refreshes all the cached data and metadata for SparkDataFrame containing path</td></tr>
+<tr><td style="width: 25%;"><a href="refreshTable.html">refreshTable</a></td>
+<td>Invalidates and refreshes all the cached data and metadata of the given table</td></tr>
 <tr><td style="width: 25%;"><a href="regexp_extract.html">regexp_extract</a></td>
 <td>regexp_extract</td></tr>
 <tr><td style="width: 25%;"><a href="regexp_extract.html">regexp_extract-method</a></td>
@@ -1068,6 +1138,10 @@
 <td>SelectExpr</td></tr>
 <tr><td style="width: 25%;"><a href="selectExpr.html">selectExpr-method</a></td>
 <td>SelectExpr</td></tr>
+<tr><td style="width: 25%;"><a href="setCheckpointDir.html">setCheckpointDir</a></td>
+<td>Set checkpoint directory</td></tr>
+<tr><td style="width: 25%;"><a href="setCurrentDatabase.html">setCurrentDatabase</a></td>
+<td>Sets the current default database</td></tr>
 <tr><td style="width: 25%;"><a href="setJobGroup.html">setJobGroup</a></td>
 <td>Assigns a group ID to all the jobs started by this thread until the group ID is set to a different value or cleared.</td></tr>
 <tr><td style="width: 25%;"><a href="setJobGroup.html">setJobGroup.default</a></td>
@@ -1140,6 +1214,22 @@
 <td>Alternating Least Squares (ALS) for Collaborative Filtering</td></tr>
 <tr><td style="width: 25%;"><a href="spark.als.html">spark.als-method</a></td>
 <td>Alternating Least Squares (ALS) for Collaborative Filtering</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">spark.associationRules</a></td>
+<td>FP-growth</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">spark.associationRules-method</a></td>
+<td>FP-growth</td></tr>
+<tr><td style="width: 25%;"><a href="spark.bisectingKmeans.html">spark.bisectingKmeans</a></td>
+<td>Bisecting K-Means Clustering Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.bisectingKmeans.html">spark.bisectingKmeans-method</a></td>
+<td>Bisecting K-Means Clustering Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">spark.fpGrowth</a></td>
+<td>FP-growth</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">spark.fpGrowth-method</a></td>
+<td>FP-growth</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">spark.freqItemsets</a></td>
+<td>FP-growth</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">spark.freqItemsets-method</a></td>
+<td>FP-growth</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gaussianMixture.html">spark.gaussianMixture</a></td>
 <td>Multivariate Gaussian Mixture Model (GMM)</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gaussianMixture.html">spark.gaussianMixture-method</a></td>
@@ -1202,6 +1292,10 @@
 <td>Accelerated Failure Time (AFT) Survival Regression Model</td></tr>
 <tr><td style="width: 25%;"><a href="spark.survreg.html">spark.survreg-method</a></td>
 <td>Accelerated Failure Time (AFT) Survival Regression Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.svmLinear.html">spark.svmLinear</a></td>
+<td>Linear SVM Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.svmLinear.html">spark.svmLinear-method</a></td>
+<td>Linear SVM Model</td></tr>
 <tr><td style="width: 25%;"><a href="SparkDataFrame.html">SparkDataFrame-class</a></td>
 <td>S4 class that represents a SparkDataFrame</td></tr>
 <tr><td style="width: 25%;"><a href="sparkR.callJMethod.html">sparkR.callJMethod</a></td>
@@ -1244,6 +1338,10 @@
 <td>startsWith</td></tr>
 <tr><td style="width: 25%;"><a href="startsWith.html">startsWith-method</a></td>
 <td>startsWith</td></tr>
+<tr><td style="width: 25%;"><a href="status.html">status</a></td>
+<td>status</td></tr>
+<tr><td style="width: 25%;"><a href="status.html">status-method</a></td>
+<td>status</td></tr>
 <tr><td style="width: 25%;"><a href="sd.html">stddev</a></td>
 <td>sd</td></tr>
 <tr><td style="width: 25%;"><a href="sd.html">stddev-method</a></td>
@@ -1256,6 +1354,10 @@
 <td>stddev_samp</td></tr>
 <tr><td style="width: 25%;"><a href="stddev_samp.html">stddev_samp-method</a></td>
 <td>stddev_samp</td></tr>
+<tr><td style="width: 25%;"><a href="stopQuery.html">stopQuery</a></td>
+<td>stopQuery</td></tr>
+<tr><td style="width: 25%;"><a href="stopQuery.html">stopQuery-method</a></td>
+<td>stopQuery</td></tr>
 <tr><td style="width: 25%;"><a href="storageLevel.html">storageLevel</a></td>
 <td>StorageLevel</td></tr>
 <tr><td style="width: 25%;"><a href="storageLevel.html">storageLevel-method</a></td>
@@ -1264,6 +1366,8 @@
 <td>Compactly display the structure of a dataset</td></tr>
 <tr><td style="width: 25%;"><a href="str.html">str-method</a></td>
 <td>Compactly display the structure of a dataset</td></tr>
+<tr><td style="width: 25%;"><a href="StreamingQuery.html">StreamingQuery-class</a></td>
+<td>S4 class that represents a StreamingQuery</td></tr>
 <tr><td style="width: 25%;"><a href="struct.html">struct</a></td>
 <td>struct</td></tr>
 <tr><td style="width: 25%;"><a href="struct.html">struct-method</a></td>
@@ -1308,6 +1412,8 @@
 <td>summary</td></tr>
 <tr><td style="width: 25%;"><a href="spark.als.html">summary-method</a></td>
 <td>Alternating Least Squares (ALS) for Collaborative Filtering</td></tr>
+<tr><td style="width: 25%;"><a href="spark.bisectingKmeans.html">summary-method</a></td>
+<td>Bisecting K-Means Clustering Model</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gaussianMixture.html">summary-method</a></td>
 <td>Multivariate Gaussian Mixture Model (GMM)</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gbt.html">summary-method</a></td>
@@ -1332,6 +1438,8 @@
 <td>Random Forest Model for Regression and Classification</td></tr>
 <tr><td style="width: 25%;"><a href="spark.survreg.html">summary-method</a></td>
 <td>Accelerated Failure Time (AFT) Survival Regression Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.svmLinear.html">summary-method</a></td>
+<td>Linear SVM Model</td></tr>
 <tr><td style="width: 25%;"><a href="summary.html">summary-method</a></td>
 <td>summary</td></tr>
 </table>
@@ -1348,7 +1456,7 @@
 <tr><td style="width: 25%;"><a href="tables.html">tables.default</a></td>
 <td>Tables</td></tr>
 <tr><td style="width: 25%;"><a href="tableToDF.html">tableToDF</a></td>
-<td>Create a SparkDataFrame from a SparkSQL Table</td></tr>
+<td>Create a SparkDataFrame from a SparkSQL table or view</td></tr>
 <tr><td style="width: 25%;"><a href="take.html">take</a></td>
 <td>Take the first NUM rows of a SparkDataFrame and return the results as a R data.frame</td></tr>
 <tr><td style="width: 25%;"><a href="take.html">take-method</a></td>
@@ -1365,6 +1473,10 @@
 <td>toDegrees</td></tr>
 <tr><td style="width: 25%;"><a href="toDegrees.html">toDegrees-method</a></td>
 <td>toDegrees</td></tr>
+<tr><td style="width: 25%;"><a href="toJSON.html">toJSON</a></td>
+<td>toJSON</td></tr>
+<tr><td style="width: 25%;"><a href="toJSON.html">toJSON-method</a></td>
+<td>toJSON</td></tr>
 <tr><td style="width: 25%;"><a href="toRadians.html">toRadians</a></td>
 <td>toRadians</td></tr>
 <tr><td style="width: 25%;"><a href="toRadians.html">toRadians-method</a></td>
@@ -1373,6 +1485,14 @@
 <td>to_date</td></tr>
 <tr><td style="width: 25%;"><a href="to_date.html">to_date-method</a></td>
 <td>to_date</td></tr>
+<tr><td style="width: 25%;"><a href="to_json.html">to_json</a></td>
+<td>to_json</td></tr>
+<tr><td style="width: 25%;"><a href="to_json.html">to_json-method</a></td>
+<td>to_json</td></tr>
+<tr><td style="width: 25%;"><a href="to_timestamp.html">to_timestamp</a></td>
+<td>to_timestamp</td></tr>
+<tr><td style="width: 25%;"><a href="to_timestamp.html">to_timestamp-method</a></td>
+<td>to_timestamp</td></tr>
 <tr><td style="width: 25%;"><a href="to_utc_timestamp.html">to_utc_timestamp</a></td>
 <td>to_utc_timestamp</td></tr>
 <tr><td style="width: 25%;"><a href="to_utc_timestamp.html">to_utc_timestamp-method</a></td>
@@ -1510,6 +1630,10 @@
 <td>Saves the MLlib model to the input path</td></tr>
 <tr><td style="width: 25%;"><a href="spark.als.html">write.ml-method</a></td>
 <td>Alternating Least Squares (ALS) for Collaborative Filtering</td></tr>
+<tr><td style="width: 25%;"><a href="spark.bisectingKmeans.html">write.ml-method</a></td>
+<td>Bisecting K-Means Clustering Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.fpGrowth.html">write.ml-method</a></td>
+<td>FP-growth</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gaussianMixture.html">write.ml-method</a></td>
 <td>Multivariate Gaussian Mixture Model (GMM)</td></tr>
 <tr><td style="width: 25%;"><a href="spark.gbt.html">write.ml-method</a></td>
@@ -1532,6 +1656,8 @@
 <td>Random Forest Model for Regression and Classification</td></tr>
 <tr><td style="width: 25%;"><a href="spark.survreg.html">write.ml-method</a></td>
 <td>Accelerated Failure Time (AFT) Survival Regression Model</td></tr>
+<tr><td style="width: 25%;"><a href="spark.svmLinear.html">write.ml-method</a></td>
+<td>Linear SVM Model</td></tr>
 <tr><td style="width: 25%;"><a href="write.orc.html">write.orc</a></td>
 <td>Save the contents of SparkDataFrame as an ORC file, preserving the schema.</td></tr>
 <tr><td style="width: 25%;"><a href="write.orc.html">write.orc-method</a></td>
@@ -1540,6 +1666,10 @@
 <td>Save the contents of SparkDataFrame as a Parquet file, preserving the schema.</td></tr>
 <tr><td style="width: 25%;"><a href="write.parquet.html">write.parquet-method</a></td>
 <td>Save the contents of SparkDataFrame as a Parquet file, preserving the schema.</td></tr>
+<tr><td style="width: 25%;"><a href="write.stream.html">write.stream</a></td>
+<td>Write the streaming SparkDataFrame to a data source.</td></tr>
+<tr><td style="width: 25%;"><a href="write.stream.html">write.stream-method</a></td>
+<td>Write the streaming SparkDataFrame to a data source.</td></tr>
 <tr><td style="width: 25%;"><a href="write.text.html">write.text</a></td>
 <td>Save the content of SparkDataFrame in a text file at the specified path.</td></tr>
 <tr><td style="width: 25%;"><a href="write.text.html">write.text-method</a></td>

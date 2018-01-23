@@ -36,6 +36,12 @@ opts_hooks$set(eval = function(options) {
   }
   options
 })
+r_tmp_dir <- tempdir()
+tmp_arg <- paste0("-Djava.io.tmpdir=", r_tmp_dir)
+sparkSessionConfig <- list(spark.driver.extraJavaOptions = tmp_arg,
+                           spark.executor.extraJavaOptions = tmp_arg)
+old_java_opt <- Sys.getenv("_JAVA_OPTIONS")
+Sys.setenv("_JAVA_OPTIONS" = paste("-XX:-UsePerfData", old_java_opt, sep = " "))
 ```
 
 ## Overview
@@ -57,8 +63,9 @@ We use default settings in which it runs in local mode. It auto downloads Spark 
 
 ```{r, include=FALSE}
 install.spark()
+sparkR.session(master = "local[1]", sparkConfig = sparkSessionConfig, enableHiveSupport = FALSE)
 ```
-```{r, message=FALSE, results="hide"}
+```{r, eval=FALSE}
 sparkR.session()
 ```
 
@@ -193,7 +200,7 @@ head(df)
 ```
 
 ### Data Sources
-SparkR supports operating on a variety of data sources through the `SparkDataFrame` interface. You can check the Spark SQL programming guide for more [specific options](https://spark.apache.org/docs/latest/sql-programming-guide.html#manually-specifying-options) that are available for the built-in data sources.
+SparkR supports operating on a variety of data sources through the `SparkDataFrame` interface. You can check the Spark SQL Programming Guide for more [specific options](https://spark.apache.org/docs/latest/sql-programming-guide.html#manually-specifying-options) that are available for the built-in data sources.
 
 The general method for creating `SparkDataFrame` from data sources is `read.df`. This method takes in the path for the file to load and the type of data source, and the currently active Spark Session will be used automatically. SparkR supports reading CSV, JSON and Parquet files natively and through Spark Packages you can find data source connectors for popular file formats like Avro. These packages can be added with `sparkPackages` parameter when initializing SparkSession using `sparkR.session`.
 
@@ -243,7 +250,7 @@ write.df(people, path = "people.parquet", source = "parquet", mode = "overwrite"
 ```
 
 ### Hive Tables
-You can also create SparkDataFrames from Hive tables. To do this we will need to create a SparkSession with Hive support which can access tables in the Hive MetaStore. Note that Spark should have been built with Hive support and more details can be found in the [SQL programming guide](https://spark.apache.org/docs/latest/sql-programming-guide.html). In SparkR, by default it will attempt to create a SparkSession with Hive support enabled (`enableHiveSupport = TRUE`).
+You can also create SparkDataFrames from Hive tables. To do this we will need to create a SparkSession with Hive support which can access tables in the Hive MetaStore. Note that Spark should have been built with Hive support and more details can be found in the [SQL Programming Guide](https://spark.apache.org/docs/latest/sql-programming-guide.html). In SparkR, by default it will attempt to create a SparkSession with Hive support enabled (`enableHiveSupport = TRUE`).
 
 ```{r, eval=FALSE}
 sql("CREATE TABLE IF NOT EXISTS src (key INT, value STRING)")
@@ -480,6 +487,8 @@ SparkR supports the following machine learning models and algorithms.
 
 #### Classification
 
+* Linear Support Vector Machine (SVM) Classifier
+
 * Logistic Regression
 
 * Multilayer Perceptron (MLP)
@@ -502,6 +511,8 @@ SparkR supports the following machine learning models and algorithms.
 
 #### Clustering
 
+* Bisecting $k$-means
+
 * Gaussian Mixture Model (GMM)
 
 * $k$-means Clustering
@@ -511,6 +522,10 @@ SparkR supports the following machine learning models and algorithms.
 #### Collaborative Filtering
 
 * Alternating Least Squares (ALS)
+
+#### Frequent Pattern Mining
+
+* FP-growth
 
 #### Statistics
 
@@ -541,6 +556,26 @@ head(carsDF_test)
 
 ### Models and Algorithms
 
+#### Linear Support Vector Machine (SVM) Classifier
+
+[Linear Support Vector Machine (SVM)](https://en.wikipedia.org/wiki/Support_vector_machine#Linear_SVM) classifier is an SVM classifier with linear kernels.
+This is a binary classifier. We use a simple example to show how to use `spark.svmLinear`
+for binary classification.
+
+```{r}
+# load training data and create a DataFrame
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+# fit a Linear SVM classifier model
+model <- spark.svmLinear(training,  Survived ~ ., regParam = 0.01, maxIter = 10)
+summary(model)
+```
+
+Predict values on training data
+```{r}
+prediction <- predict(model, training)
+```
+
 #### Logistic Regression
 
 [Logistic regression](https://en.wikipedia.org/wiki/Logistic_regression) is a widely-used model when the response is categorical. It can be seen as a special case of the [Generalized Linear Predictive Model](https://en.wikipedia.org/wiki/Generalized_linear_model).
@@ -552,11 +587,10 @@ We use a simple example to demonstrate `spark.logit` usage. In general, there ar
 and 3). Obtain the coefficient matrix of the fitted model using `summary` and use the model for prediction with `predict`.
 
 Binomial logistic regression
-```{r, warning=FALSE}
-df <- createDataFrame(iris)
-# Create a DataFrame containing two classes
-training <- df[df$Species %in% c("versicolor", "virginica"), ]
-model <- spark.logit(training, Species ~ ., regParam = 0.00042)
+```{r}
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+model <- spark.logit(training, Survived ~ ., regParam = 0.04741301)
 summary(model)
 ```
 
@@ -566,10 +600,11 @@ fitted <- predict(model, training)
 ```
 
 Multinomial logistic regression against three classes
-```{r, warning=FALSE}
-df <- createDataFrame(iris)
+```{r}
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
 # Note in this case, Spark infers it is multinomial logistic regression, so family = "multinomial" is optional.
-model <- spark.logit(df, Species ~ ., regParam = 0.056)
+model <- spark.logit(training, Class ~ ., regParam = 0.07815179)
 summary(model)
 ```
 
@@ -596,11 +631,12 @@ MLPC employs backpropagation for learning the model. We use the logistic loss fu
 
 `spark.mlp` requires at least two columns in `data`: one named `"label"` and the other one `"features"`. The `"features"` column should be in libSVM-format.
 
-We use iris data set to show how to use `spark.mlp` in classification.
-```{r, warning=FALSE}
-df <- createDataFrame(iris)
+We use Titanic data set to show how to use `spark.mlp` in classification.
+```{r}
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
 # fit a Multilayer Perceptron Classification Model
-model <- spark.mlp(df, Species ~ ., blockSize = 128, layers = c(4, 3), solver = "l-bfgs", maxIter = 100, tol = 0.5, stepSize = 1, seed = 1, initialWeights = c(0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 9, 9, 9, 9, 9))
+model <- spark.mlp(training, Survived ~ Age + Sex, blockSize = 128, layers = c(2, 3), solver = "l-bfgs", maxIter = 100, tol = 0.5, stepSize = 1, seed = 1, initialWeights = c( 0, 0, 0, 5, 5, 5, 9, 9, 9))
 ```
 
 To avoid lengthy display, we only present partial results of the model summary. You can check the full result from your sparkR shell.
@@ -617,7 +653,7 @@ options(ops)
 ```
 ```{r}
 # make predictions use the fitted model
-predictions <- predict(model, df)
+predictions <- predict(model, training)
 head(select(predictions, predictions$prediction))
 ```
 
@@ -639,6 +675,7 @@ head(select(naiveBayesPrediction, "Class", "Sex", "Age", "Survived", "prediction
 Survival analysis studies the expected duration of time until an event happens, and often the relationship with risk factors or treatment taken on the subject. In contrast to standard regression analysis, survival modeling has to deal with special characteristics in the data including non-negative survival time and censoring.
 
 Accelerated Failure Time (AFT) model is a parametric survival model for censored data that assumes the effect of a covariate is to accelerate or decelerate the life course of an event by some constant. For more information, refer to the Wikipedia page [AFT Model](https://en.wikipedia.org/wiki/Accelerated_failure_time_model) and the references there. Different from a [Proportional Hazards Model](https://en.wikipedia.org/wiki/Proportional_hazards_model) designed for the same purpose, the AFT model is easier to parallelize because each instance contributes to the objective function independently.
+
 ```{r, warning=FALSE}
 library(survival)
 ovarianDF <- createDataFrame(ovarian)
@@ -658,6 +695,7 @@ gaussian | identity, log, inverse
 binomial | logit, probit, cloglog (complementary log-log)
 poisson | log, identity, sqrt
 gamma | inverse, identity, log
+tweedie | power link function
 
 There are three ways to specify the `family` argument.
 
@@ -665,7 +703,11 @@ There are three ways to specify the `family` argument.
 
 * Family function, e.g. `family = binomial`.
 
-* Result returned by a family function, e.g. `family = poisson(link = log)`
+* Result returned by a family function, e.g. `family = poisson(link = log)`.
+
+* Note that there are two ways to specify the tweedie family:
+  a) Set `family = "tweedie"` and specify the `var.power` and `link.power`
+  b) When package `statmod` is loaded, the tweedie family is specified using the family definition therein, i.e., `tweedie()`.
 
 For more information regarding the families and their link functions, see the Wikipedia page [Generalized Linear Model](https://en.wikipedia.org/wiki/Generalized_linear_model).
 
@@ -679,6 +721,18 @@ When doing prediction, a new column called `prediction` will be appended. Let's 
 ```{r}
 gaussianFitted <- predict(gaussianGLM, carsDF)
 head(select(gaussianFitted, "model", "prediction", "mpg", "wt", "hp"))
+```
+
+The following is the same fit using the tweedie family:
+```{r}
+tweedieGLM1 <- spark.glm(carsDF, mpg ~ wt + hp, family = "tweedie", var.power = 0.0)
+summary(tweedieGLM1)
+```
+We can try other distributions in the tweedie family, for example, a compound Poisson distribution with a log link:
+```{r}
+tweedieGLM2 <- spark.glm(carsDF, mpg ~ wt + hp, family = "tweedie",
+                         var.power = 1.2, link.power = 0.0)
+summary(tweedieGLM2)
 ```
 
 #### Isotonic Regression
@@ -750,6 +804,19 @@ df <- createDataFrame(longley)
 rfModel <- spark.randomForest(df, Employed ~ ., type = "regression", maxDepth = 2, numTrees = 2)
 summary(rfModel)
 predictions <- predict(rfModel, df)
+```
+
+#### Bisecting k-Means
+
+`spark.bisectingKmeans` is a kind of [hierarchical clustering](https://en.wikipedia.org/wiki/Hierarchical_clustering) using a divisive (or "top-down") approach: all observations start in one cluster, and splits are performed recursively as one moves down the hierarchy.
+
+```{r}
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+model <- spark.bisectingKmeans(training, Class ~ Survived, k = 4)
+summary(model)
+fitted <- predict(model, training)
+head(select(fitted, "Class", "prediction"))
 ```
 
 #### Gaussian Mixture Model
@@ -839,7 +906,7 @@ perplexity
 
 There are multiple options that can be configured in `spark.als`, including `rank`, `reg`, and `nonnegative`. For a complete list, refer to the help file.
 
-```{r}
+```{r, eval=FALSE}
 ratings <- list(list(0, 0, 4.0), list(0, 1, 2.0), list(1, 1, 3.0), list(1, 2, 4.0),
                 list(2, 1, 1.0), list(2, 2, 5.0))
 df <- createDataFrame(ratings, c("user", "item", "rating"))
@@ -847,7 +914,7 @@ model <- spark.als(df, "rating", "user", "item", rank = 10, reg = 0.1, nonnegati
 ```
 
 Extract latent factors.
-```{r}
+```{r, eval=FALSE}
 stats <- summary(model)
 userFactors <- stats$userFactors
 itemFactors <- stats$itemFactors
@@ -857,9 +924,40 @@ head(itemFactors)
 
 Make predictions.
 
-```{r}
+```{r, eval=FALSE}
 predicted <- predict(model, df)
 head(predicted)
+```
+
+#### FP-growth
+
+`spark.fpGrowth` executes FP-growth algorithm to mine frequent itemsets on a `SparkDataFrame`. `itemsCol` should be an array of values.
+
+```{r}
+df <- selectExpr(createDataFrame(data.frame(rawItems = c(
+  "T,R,U", "T,S", "V,R", "R,U,T,V", "R,S", "V,S,U", "U,R", "S,T", "V,R", "V,U,S",
+  "T,V,U", "R,V", "T,S", "T,S", "S,T", "S,U", "T,R", "V,R", "S,V", "T,S,U"
+))), "split(rawItems, ',') AS items")
+
+fpm <- spark.fpGrowth(df, minSupport = 0.2, minConfidence = 0.5)
+```
+
+`spark.freqItemsets` method can be used to retrieve a `SparkDataFrame` with the frequent itemsets.
+
+```{r}
+head(spark.freqItemsets(fpm))
+```
+
+`spark.associationRules` returns a `SparkDataFrame` with the association rules.
+
+```{r}
+head(spark.associationRules(fpm))
+```
+
+We can make predictions based on the `antecedent`.
+
+```{r}
+head(predict(fpm, df))
 ```
 
 #### Kolmogorov-Smirnov Test
@@ -887,9 +985,10 @@ testSummary
 
 ### Model Persistence
 The following example shows how to save/load an ML model in SparkR.
-```{r, warning=FALSE}
-irisDF <- createDataFrame(iris)
-gaussianGLM <- spark.glm(irisDF, Sepal_Length ~ Sepal_Width + Species, family = "gaussian")
+```{r}
+t <- as.data.frame(Titanic)
+training <- createDataFrame(t)
+gaussianGLM <- spark.glm(training, Freq ~ Sex + Age, family = "gaussian")
 
 # Save and then load a fitted MLlib model
 modelPath <- tempfile(pattern = "ml", fileext = ".tmp")
@@ -900,10 +999,76 @@ gaussianGLM2 <- read.ml(modelPath)
 summary(gaussianGLM2)
 
 # Check model prediction
-gaussianPredictions <- predict(gaussianGLM2, irisDF)
+gaussianPredictions <- predict(gaussianGLM2, training)
 head(gaussianPredictions)
 
 unlink(modelPath)
+```
+
+
+## Structured Streaming
+
+SparkR supports the Structured Streaming API (experimental).
+
+You can check the Structured Streaming Programming Guide for [an introduction](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#programming-model) to its programming model and basic concepts.
+
+### Simple Source and Sink
+
+Spark has a few built-in input sources. As an example, to test with a socket source reading text into words and displaying the computed word counts:
+
+```{r, eval=FALSE}
+# Create DataFrame representing the stream of input lines from connection
+lines <- read.stream("socket", host = hostname, port = port)
+
+# Split the lines into words
+words <- selectExpr(lines, "explode(split(value, ' ')) as word")
+
+# Generate running word count
+wordCounts <- count(groupBy(words, "word"))
+
+# Start running the query that prints the running counts to the console
+query <- write.stream(wordCounts, "console", outputMode = "complete")
+```
+
+### Kafka Source
+
+It is simple to read data from Kafka. For more information, see [Input Sources](https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#input-sources) supported by Structured Streaming.
+
+```{r, eval=FALSE}
+topic <- read.stream("kafka",
+                     kafka.bootstrap.servers = "host1:port1,host2:port2",
+                     subscribe = "topic1")
+keyvalue <- selectExpr(topic, "CAST(key AS STRING)", "CAST(value AS STRING)")
+```
+
+### Operations and Sinks
+
+Most of the common operations on `SparkDataFrame` are supported for streaming, including selection, projection, and aggregation. Once you have defined the final result, to start the streaming computation, you will call the `write.stream` method setting a sink and `outputMode`.
+
+A streaming `SparkDataFrame` can be written for debugging to the console, to a temporary in-memory table, or for further processing in a fault-tolerant manner to a File Sink in different formats.
+
+```{r, eval=FALSE}
+noAggDF <- select(where(deviceDataStreamingDf, "signal > 10"), "device")
+
+# Print new data to console
+write.stream(noAggDF, "console")
+
+# Write new data to Parquet files
+write.stream(noAggDF,
+             "parquet",
+             path = "path/to/destination/dir",
+             checkpointLocation = "path/to/checkpoint/dir")
+
+# Aggregate
+aggDF <- count(groupBy(noAggDF, "device"))
+
+# Print updated aggregations to console
+write.stream(aggDF, "console", outputMode = "complete")
+
+# Have all the aggregates in an in memory table. The query name will be the table name
+write.stream(aggDF, "memory", queryName = "aggregates", outputMode = "complete")
+
+head(sql("select * from aggregates"))
 ```
 
 
@@ -982,4 +1147,8 @@ env | map
 
 ```{r, echo=FALSE}
 sparkR.session.stop()
+```
+
+```{r cleanup, include=FALSE}
+SparkR:::uninstallDownloadedSpark()
 ```
