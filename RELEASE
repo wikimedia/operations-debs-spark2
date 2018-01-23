@@ -1,2 +1,2 @@
-Spark 2.1.2 (git revision ff4179bba7) built for Hadoop 2.6.4
+Spark 2.2.1 built for Hadoop 2.6.5
 Build flags: -Phadoop-2.6 -Psparkr -Phive -Phive-thriftserver -Pyarn -Pmesos -DzincPort=3035

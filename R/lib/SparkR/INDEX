@@ -3,6 +3,9 @@ AFTSurvivalRegressionModel-class
                         S4 class that represents a
                         AFTSurvivalRegressionModel
 ALSModel-class          S4 class that represents an ALSModel
+BisectingKMeansModel-class
+                        S4 class that represents a BisectingKMeansModel
+FPGrowthModel-class     S4 class that represents a FPGrowthModel
 GBTClassificationModel-class
                         S4 class that represents a
                         GBTClassificationModel
@@ -20,6 +23,7 @@ IsotonicRegressionModel-class
 KMeansModel-class       S4 class that represents a KMeansModel
 KSTest-class            S4 class that represents an KSTest
 LDAModel-class          S4 class that represents an LDAModel
+LinearSVCModel-class    S4 class that represents an LinearSVCModel
 LogisticRegressionModel-class
                         S4 class that represents an
                         LogisticRegressionModel
@@ -34,6 +38,7 @@ RandomForestRegressionModel-class
                         S4 class that represents a
                         RandomForestRegressionModel
 SparkDataFrame-class    S4 class that represents a SparkDataFrame
+StreamingQuery-class    S4 class that represents a StreamingQuery
 WindowSpec-class        S4 class that represents a WindowSpec
 abs                     abs
 acos                    acos
@@ -42,8 +47,8 @@ agg                     summarize
 alias                   alias
 approxCountDistinct     Returns the approximate number of distinct
                         items in a group
-approxQuantile          Calculates the approximate quantiles of a
-                        numerical column of a SparkDataFrame
+approxQuantile          Calculates the approximate quantiles of
+                        numerical columns of a SparkDataFrame
 arrange                 Arrange Rows by Variables
 array_contains          array_contains
 as.data.frame           Download data from a SparkDataFrame into a R
@@ -54,8 +59,10 @@ ascii                   ascii
 asin                    asin
 atan                    atan
 atan2                   atan2
-attach                  Attach SparkDataFrame to R search path
+attach,SparkDataFrame-method
+                        Attach SparkDataFrame to R search path
 avg                     avg
+awaitTermination        awaitTermination
 base64                  base64
 between                 between
 bin                     bin
@@ -67,6 +74,7 @@ cancelJobGroup          Cancel active jobs for the specified group
 cast                    Casts the column to a different data type.
 cbrt                    cbrt
 ceil                    Computes the ceiling of the given value
+checkpoint              checkpoint
 clearCache              Clear Cache
 clearJobGroup           Clear current job group ID and its description
 coalesce                Coalesce
@@ -88,13 +96,16 @@ cov                     cov
 covar_pop               covar_pop
 crc32                   crc32
 createDataFrame         Create a SparkDataFrame
-createExternalTable     Create an external table
+createExternalTable     (Deprecated) Create an external table
 createOrReplaceTempView
                         Creates a temporary view using the given name.
+createTable             Creates a table based on the dataset in a data
+                        source
 crossJoin               CrossJoin
 crosstab                Computes a pair-wise frequency table of the
                         given columns
 cume_dist               cume_dist
+currentDatabase         Returns the current default database
 dapply                  dapply
 dapplyCollect           dapplyCollect
 date_add                date_add
@@ -133,6 +144,7 @@ format_number           format_number
 format_string           format_string
 freqItems               Finding frequent items for columns, possibly
                         with false positives
+from_json               from_json
 from_unixtime           from_unixtime
 from_utc_timestamp      from_utc_timestamp
 gapply                  gapply
@@ -141,13 +153,15 @@ generateAliasesForIntersectedCols
                         Creates a list of columns by replacing the
                         intersected ones with aliases
 getNumPartitions        getNumPartitions
-glm                     Generalized Linear Models (R-compliant)
+glm,formula,ANY,SparkDataFrame-method
+                        Generalized Linear Models (R-compliant)
 greatest                greatest
 group_by                GroupBy
 hash                    hash
 hashCode                Compute the hashCode of an object
 head                    Head
 hex                     hex
+hint                    hint
 histogram               Compute histogram statistics for given column
 hour                    hour
 hypot                   hypot
@@ -158,18 +172,28 @@ install.spark           Download and Install Apache Spark to a Local
                         Directory
 instr                   instr
 intersect               Intersect
+isActive                isActive
 isLocal                 isLocal
+isStreaming             isStreaming
 isnan                   is.nan
 join                    Join
 kurtosis                kurtosis
 lag                     lag
 last                    last
+lastProgress            lastProgress
 last_day                last_day
 lead                    lead
 least                   least
 length                  length
 levenshtein             levenshtein
 limit                   Limit
+listColumns             Returns a list of columns for the given
+                        table/view in the specified database
+listDatabases           Returns a list of databases available
+listFunctions           Returns a list of functions registered in the
+                        specified database
+listTables              Returns a list of tables or views in the
+                        specified database
 lit                     lit
 locate                  locate
 log                     log
@@ -213,6 +237,7 @@ print.structField       Print a Spark StructField.
 print.structType        Print a Spark StructType.
 printSchema             Print Schema of a SparkDataFrame
 quarter                 quarter
+queryName               queryName
 rand                    rand
 randn                   randn
 randomSplit             randomSplit
@@ -226,7 +251,14 @@ read.json               Create a SparkDataFrame from a JSON file.
 read.ml                 Load a fitted MLlib model from the input path.
 read.orc                Create a SparkDataFrame from an ORC file.
 read.parquet            Create a SparkDataFrame from a Parquet file.
+read.stream             Load a streaming SparkDataFrame
 read.text               Create a SparkDataFrame from a text file.
+recoverPartitions       Recovers all the partitions in the directory of
+                        a table and update the catalog
+refreshByPath           Invalidates and refreshes all the cached data
+                        and metadata for SparkDataFrame containing path
+refreshTable            Invalidates and refreshes all the cached data
+                        and metadata of the given table
 regexp_extract          regexp_extract
 regexp_replace          regexp_replace
 registerTempTable       (Deprecated) Register Temporary Table
@@ -248,6 +280,8 @@ sd                      sd
 second                  second
 select                  Select
 selectExpr              SelectExpr
+setCheckpointDir        Set checkpoint directory
+setCurrentDatabase      Sets the current default database
 setJobGroup             Assigns a group ID to all the jobs started by
                         this thread until the group ID is set to a
                         different value or cleared.
@@ -270,6 +304,8 @@ spark.addFile           Add a file or directory to be downloaded with
                         this Spark job on every node.
 spark.als               Alternating Least Squares (ALS) for
                         Collaborative Filtering
+spark.bisectingKmeans   Bisecting K-Means Clustering Model
+spark.fpGrowth          FP-growth
 spark.gaussianMixture   Multivariate Gaussian Mixture Model (GMM)
 spark.gbt               Gradient Boosted Tree Model for Regression and
                         Classification
@@ -292,6 +328,7 @@ spark.randomForest      Random Forest Model for Regression and
                         Classification
 spark.survreg           Accelerated Failure Time (AFT) Survival
                         Regression Model
+spark.svmLinear         Linear SVM Model
 sparkR.callJMethod      Call Java Methods
 sparkR.callJStatic      Call Static Java Methods
 sparkR.conf             Get Runtime Config from the current active
@@ -311,8 +348,10 @@ spark_partition_id      Return the partition ID as a column
 sql                     SQL Query
 sqrt                    sqrt
 startsWith              startsWith
+status                  status
 stddev_pop              stddev_pop
 stddev_samp             stddev_samp
+stopQuery               stopQuery
 storageLevel            StorageLevel
 str                     Compactly display the structure of a dataset
 struct                  struct
@@ -324,15 +363,19 @@ substring_index         substring_index
 sum                     sum
 sumDistinct             sumDistinct
 tableNames              Table Names
-tableToDF               Create a SparkDataFrame from a SparkSQL Table
+tableToDF               Create a SparkDataFrame from a SparkSQL table
+                        or view
 tables                  Tables
 take                    Take the first NUM rows of a SparkDataFrame and
                         return the results as a R data.frame
 tan                     tan
 tanh                    tanh
 toDegrees               toDegrees
+toJSON                  toJSON
 toRadians               toRadians
 to_date                 to_date
+to_json                 to_json
+to_timestamp            to_timestamp
 to_utc_timestamp        to_utc_timestamp
 translate               translate
 trim                    trim
@@ -366,6 +409,8 @@ write.orc               Save the contents of SparkDataFrame as an ORC
                         file, preserving the schema.
 write.parquet           Save the contents of SparkDataFrame as a
                         Parquet file, preserving the schema.
+write.stream            Write the streaming SparkDataFrame to a data
+                        source.
 write.text              Save the content of SparkDataFrame in a text
                         file at the specified path.
 year                    year
