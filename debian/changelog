@@ -1,4 +1,4 @@
-spark2 (2.2.1-bin-hadoop2.6-1~jessie1) jessie-wikimedia; urgency=medium
+spark2 (2.2.1-bin-hadoop2.6-1~stretch1) stretch-wikimedia; urgency=medium
 
   * 2.2.1 binary release for Hadoop 2.6
   * Now depends on Java 8
