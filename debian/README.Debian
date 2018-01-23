@@ -6,7 +6,7 @@ https://spark.apache.org/downloads.html. It does not build Spark from source.
 
 This repository was created using git-import-orig:
 
-  VERSION=2.1.2-bin-hadoop2.6
+  VERSION=2.2.1-bin-hadoop2.6
   gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian ../spark-$VERSION.tgz
 
 You should be able to import a new upstream release using the same command again.

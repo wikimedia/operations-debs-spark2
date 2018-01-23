@@ -1,3 +1,10 @@
+spark2 (2.2.1-bin-hadoop2.6-1~jessie1) jessie-wikimedia; urgency=medium
+
+  * 2.2.1 binary release for Hadoop 2.6
+  * Now depends on Java 8
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Tue, 23 Jan 2018 15:46:46 +0000
+
 spark2 (2.1.2-bin-hadoop2.6-3~jessie1) jessie-wikimedia; urgency=low
 
   * 2.1.2 -3 release for Hadoop 2.6

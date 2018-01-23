@@ -8,7 +8,7 @@ Homepage: https://spark.apache.org
 
 Package: spark2
 Architecture: all
-Depends: default-jre-headless | java7-runtime-headless, ${misc:Depends}
+Depends: java8-runtime-headless, ${misc:Depends}
 Description: Spark 2
  This is a binary distribution of Spark 2.  This package can be installed
  alongside of an existing Spark 1 installation.  Spark executables are renamed
