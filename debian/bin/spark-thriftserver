@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+#
+# Shell script for running the Spark SQL Thrift server.
+#
+# NOTE: This script was copied and modified by WMF from Spark's
+# sbin/start-thriftserver.sh to run in the foreground rather
+# than in the background.
+# 
+
+# Enter posix mode for bash
+set -o posix
+
+if [ -z "${SPARK_HOME}" ]; then
+  source "$(dirname "$0")"/find-spark-home
+fi
+
+# NOTE: This exact class name is matched downstream by SparkSubmit.
+# Any changes need to be reflected there.
+CLASS="org.apache.spark.sql.hive.thriftserver.HiveThriftServer2"
+
+function usage {
+  echo "Usage: $(basename $0) [options] [thrift server options]"
+  pattern="usage"
+  pattern+="\|Spark assembly has been built with Hive"
+  pattern+="\|NOTE: SPARK_PREPEND_CLASSES is set"
+  pattern+="\|Spark Command: "
+  pattern+="\|======="
+  pattern+="\|--help"
+
+  "${SPARK_HOME}"/bin/spark-submit --help 2>&1 | grep -v Usage 1>&2
+  echo
+  # This doesn't work:
+  # ERROR SparkContext: Error initializing SparkContext.
+  # org.apache.spark.SparkException: A master URL must be set in your configuration
+  # echo "Thrift server options:"
+  # "${SPARK_HOME}"/bin/spark-class $CLASS --help 2>&1 | grep -v "$pattern" 1>&2
+}
+
+if [[ "$@" = *--help ]] || [[ "$@" = *-h ]]; then
+  usage
+  exit 0
+fi
+
+export SUBMIT_USAGE_FUNCTION=usage
+
+"${SPARK_HOME}"/bin/spark-submit --class $CLASS --name "Thrift JDBC/ODBC Server" "$@"
