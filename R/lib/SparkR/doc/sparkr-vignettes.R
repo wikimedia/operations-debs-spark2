@@ -136,6 +136,12 @@ numCyl <- summarize(groupBy(carsDF, carsDF$cyl), count = n(carsDF$cyl))
 head(numCyl)
 
 ## ------------------------------------------------------------------------
+mean(cube(carsDF, "cyl", "gear", "am"), "mpg")
+
+## ------------------------------------------------------------------------
+mean(rollup(carsDF, "cyl", "gear", "am"), "mpg")
+
+## ------------------------------------------------------------------------
 carsDF_km <- carsDF
 carsDF_km$kmpg <- carsDF_km$mpg * 1.61
 head(select(carsDF_km, "model", "mpg", "kmpg"))
@@ -148,8 +154,7 @@ head(carsRank, n = 20L)
 
 ## ------------------------------------------------------------------------
 carsSubDF <- select(carsDF, "model", "mpg")
-schema <- structType(structField("model", "string"), structField("mpg", "double"),
-                     structField("kmpg", "double"))
+schema <- "model STRING, mpg DOUBLE, kmpg DOUBLE"
 out <- dapply(carsSubDF, function(x) { x <- cbind(x, x$mpg * 1.61) }, schema)
 head(collect(out))
 
@@ -327,15 +332,24 @@ head(select(isoregFitted, "x", "y", "prediction"))
 newDF <- createDataFrame(data.frame(x = c(1.5, 3.2)))
 head(predict(isoregModel, newDF))
 
-## ---- warning=FALSE------------------------------------------------------
-df <- createDataFrame(longley)
-gbtModel <- spark.gbt(df, Employed ~ ., type = "regression", maxDepth = 2, maxIter = 2)
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+df <- createDataFrame(t)
+dtModel <- spark.decisionTree(df, Survived ~ ., type = "classification", maxDepth = 2)
+summary(dtModel)
+predictions <- predict(dtModel, df)
+
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+df <- createDataFrame(t)
+gbtModel <- spark.gbt(df, Survived ~ ., type = "classification", maxDepth = 2, maxIter = 2)
 summary(gbtModel)
 predictions <- predict(gbtModel, df)
 
-## ---- warning=FALSE------------------------------------------------------
-df <- createDataFrame(longley)
-rfModel <- spark.randomForest(df, Employed ~ ., type = "regression", maxDepth = 2, numTrees = 2)
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+df <- createDataFrame(t)
+rfModel <- spark.randomForest(df, Survived ~ ., type = "classification", maxDepth = 2, numTrees = 2)
 summary(rfModel)
 predictions <- predict(rfModel, df)
 
@@ -423,13 +437,14 @@ head(spark.associationRules(fpm))
 ## ------------------------------------------------------------------------
 head(predict(fpm, df))
 
-## ---- warning=FALSE------------------------------------------------------
-df <- createDataFrame(longley)
-afStats <- head(select(df, mean(df$Armed_Forces), sd(df$Armed_Forces)))
-afMean <- afStats[1]
-afStd <- afStats[2]
+## ------------------------------------------------------------------------
+t <- as.data.frame(Titanic)
+df <- createDataFrame(t)
+freqStats <- head(select(df, mean(df$Freq), sd(df$Freq)))
+freqMean <- freqStats[1]
+freqStd <- freqStats[2]
 
-test <- spark.kstest(df, "Armed_Forces", "norm", c(afMean, afStd))
+test <- spark.kstest(df, "Freq", "norm", c(freqMean, freqStd))
 testSummary <- summary(test)
 testSummary
 

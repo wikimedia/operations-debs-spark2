@@ -53,7 +53,7 @@ if __name__ == "__main__":
     # This prints the parameter (name: value) pairs, where names are unique IDs for this
     # LogisticRegression instance.
     print("Model 1 was fit using parameters: ")
-    print(lr.extractParamMap())
+    print(model1.extractParamMap())
 
     # We may alternatively specify parameters using a Python dictionary as a paramMap
     paramMap = {lr.maxIter: 20}
@@ -69,7 +69,7 @@ if __name__ == "__main__":
     # paramMapCombined overrides all parameters set earlier via lr.set* methods.
     model2 = lr.fit(training, paramMapCombined)
     print("Model 2 was fit using parameters: ")
-    print(lr.extractParamMap(extra=paramMapCombined))
+    print(model2.extractParamMap())
 
     # Prepare test data
     test = spark.createDataFrame([
