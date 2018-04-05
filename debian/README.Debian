@@ -6,8 +6,11 @@ https://spark.apache.org/downloads.html. It does not build Spark from source.
 
 This repository was created using git-import-orig:
 
-  VERSION=2.2.1-bin-hadoop2.6
-  gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian ../spark-$VERSION.tgz
+  SPARK_VERSION=2.3.0
+  HADOOP_VERSION=2.6
+  VERSION=${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}
+  wget -P /tmp http://ftp.wayne.edu/apache/spark/spark-$SPARK_VERSION/spark-$VERSION.tgz
+  gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-$VERSION.tgz
 
 You should be able to import a new upstream release using the same command again.
 
@@ -20,7 +23,7 @@ Finally, to build --include-removal needs to be passed to dpkg-source so that an
 will be removed from the source package.  You can do so by passing --source-option="--include-removal"
 to git-buildpackage or dpkg-buildpackage.  On a Wikimedia build server:
 
-  GIT_PBUILDER_AUTOCONF=no DIST=jessie WIKIMEDIA=yes gbp buildpackage -sa -us -uc --git-builder=git-pbuilder --source-option="--include-removal"
+  GIT_PBUILDER_AUTOCONF=no DIST=stretch WIKIMEDIA=yes gbp buildpackage -sa -us -uc --git-builder=git-pbuilder --source-option="--include-removal"
 
 spark2-assembly.zip
 -------------------
