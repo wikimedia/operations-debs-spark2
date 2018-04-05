@@ -30,3 +30,8 @@ spark2-assembly.zip
 This package builds a spark2-assembly.zip archive from all files in the
 jars directory.  If an HDFS, client is avaliable, spark2-assembly.zip will be
 uploaded to HDFS, and spark-defaults.conf will be configured to use it.
+
+If you are upgrading the spark2 package, you will need to reupload the assembly .zip
+file to HDFS manually:
+
+  sudo -u spark hdfs dfs -put -f /usr/lib/spark2/spark2-assembly.zip hdfs:///user/spark/share/lib/spark2-assembly.zip
