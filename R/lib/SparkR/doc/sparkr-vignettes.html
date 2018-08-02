@@ -223,7 +223,7 @@ hr {
 
 <h2>Overview</h2>
 
-<p>SparkR is an R package that provides a light-weight frontend to use Apache Spark from R. With Spark 2.3.0, SparkR provides a distributed data frame implementation that supports data processing operations like selection, filtering, aggregation etc. and distributed machine learning using <a href="http://spark.apache.org/mllib/">MLlib</a>.</p>
+<p>SparkR is an R package that provides a light-weight frontend to use Apache Spark from R. With Spark 2.3.1, SparkR provides a distributed data frame implementation that supports data processing operations like selection, filtering, aggregation etc. and distributed machine learning using <a href="https://spark.apache.org/mllib/">MLlib</a>.</p>
 
 <h2>Getting Started</h2>
 
@@ -349,7 +349,7 @@ class(carsGP)
 
 <p>Different from many other R packages, to use SparkR, you need an additional installation of Apache Spark. The Spark installation will be used to run a backend process that will compile and execute SparkR programs.</p>
 
-<p>After installing the SparkR package, you can call <code>sparkR.session</code> as explained in the previous section to start and it will check for the Spark installation. If you are working with SparkR from an interactive shell (eg. R, RStudio) then Spark is downloaded and cached automatically if it is not found. Alternatively, we provide an easy-to-use function <code>install.spark</code> for running this manually. If you don&#39;t have Spark installed on the computer, you may download it from <a href="http://spark.apache.org/downloads.html">Apache Spark Website</a>.</p>
+<p>After installing the SparkR package, you can call <code>sparkR.session</code> as explained in the previous section to start and it will check for the Spark installation. If you are working with SparkR from an interactive shell (eg. R, RStudio) then Spark is downloaded and cached automatically if it is not found. Alternatively, we provide an easy-to-use function <code>install.spark</code> for running this manually. If you don&#39;t have Spark installed on the computer, you may download it from <a href="https://spark.apache.org/downloads.html">Apache Spark Website</a>.</p>
 
 <pre><code class="r">install.spark()
 </code></pre>
@@ -361,7 +361,7 @@ class(carsGP)
 
 <h3>Spark Session {#SetupSparkSession}</h3>
 
-<p>In addition to <code>sparkHome</code>, many other options can be specified in <code>sparkR.session</code>. For a complete list, see <a href="http://spark.apache.org/docs/latest/sparkr.html#starting-up-sparksession">Starting up: SparkSession</a> and <a href="http://spark.apache.org/docs/latest/api/R/sparkR.session.html">SparkR API doc</a>.</p>
+<p>In addition to <code>sparkHome</code>, many other options can be specified in <code>sparkR.session</code>. For a complete list, see <a href="https://spark.apache.org/docs/latest/sparkr.html#starting-up-sparksession">Starting up: SparkSession</a> and <a href="https://spark.apache.org/docs/latest/api/R/sparkR.session.html">SparkR API doc</a>.</p>
 
 <p>In particular, the following Spark driver properties can be set in <code>sparkConfig</code>.</p>
 
@@ -412,16 +412,16 @@ sparkR.session(spark.sql.warehouse.dir = spark_warehouse_path)
 
 <h4>Cluster Mode</h4>
 
-<p>SparkR can connect to remote Spark clusters. <a href="http://spark.apache.org/docs/latest/cluster-overview.html">Cluster Mode Overview</a> is a good introduction to different Spark cluster modes.</p>
+<p>SparkR can connect to remote Spark clusters. <a href="https://spark.apache.org/docs/latest/cluster-overview.html">Cluster Mode Overview</a> is a good introduction to different Spark cluster modes.</p>
 
 <p>When connecting SparkR to a remote Spark cluster, make sure that the Spark version and Hadoop version on the machine match the corresponding versions on the cluster. Current SparkR package is compatible with</p>
 
-<pre><code>## [1] &quot;Spark 2.3.0&quot;
+<pre><code>## [1] &quot;Spark 2.3.1&quot;
 </code></pre>
 
 <p>It should be used both on the local computer and on the remote cluster.</p>
 
-<p>To connect, pass the URL of the master node to <code>sparkR.session</code>. A complete list can be seen in <a href="http://spark.apache.org/docs/latest/submitting-applications.html#master-urls">Spark Master URLs</a>.
+<p>To connect, pass the URL of the master node to <code>sparkR.session</code>. A complete list can be seen in <a href="https://spark.apache.org/docs/latest/submitting-applications.html#master-urls">Spark Master URLs</a>.
 For example, to connect to a local standalone Spark master, we can call</p>
 
 <pre><code class="r">sparkR.session(master = &quot;spark://local:7077&quot;)
@@ -639,7 +639,7 @@ head(results)
 <li><p>Feed the <code>GroupedData</code> object to <code>agg</code> or <code>summarize</code> functions, with some provided aggregation functions to compute a number within each group.</p></li>
 </ol>
 
-<p>A number of widely used functions are supported to aggregate data after grouping, including <code>avg</code>, <code>countDistinct</code>, <code>count</code>, <code>first</code>, <code>kurtosis</code>, <code>last</code>, <code>max</code>, <code>mean</code>, <code>min</code>, <code>sd</code>, <code>skewness</code>, <code>stddev_pop</code>, <code>stddev_samp</code>, <code>sumDistinct</code>, <code>sum</code>, <code>var_pop</code>, <code>var_samp</code>, <code>var</code>. See the <a href="http://spark.apache.org/docs/latest/api/R/mean.html">API doc for <code>mean</code></a> and other <code>agg_funcs</code> linked there.</p>
+<p>A number of widely used functions are supported to aggregate data after grouping, including <code>avg</code>, <code>countDistinct</code>, <code>count</code>, <code>first</code>, <code>kurtosis</code>, <code>last</code>, <code>max</code>, <code>mean</code>, <code>min</code>, <code>sd</code>, <code>skewness</code>, <code>stddev_pop</code>, <code>stddev_samp</code>, <code>sumDistinct</code>, <code>sum</code>, <code>var_pop</code>, <code>var_samp</code>, <code>var</code>. See the <a href="https://spark.apache.org/docs/latest/api/R/column_aggregate_functions.html">API doc for aggregate functions</a> linked there.</p>
 
 <p>For example we can compute a histogram of the number of cylinders in the <code>mtcars</code> dataset as shown below.</p>
 
@@ -1027,7 +1027,7 @@ train &lt;- function(cost) {
 ## attr(,&quot;response&quot;)
 ## [1] 1
 ## attr(,&quot;.Environment&quot;)
-## &lt;environment: 0x7fd4895d9b18&gt;
+## &lt;environment: 0x4c42db8&gt;
 ## attr(,&quot;predvars&quot;)
 ## list(Species, Sepal.Length, Sepal.Width, Petal.Length, Petal.Width)
 ## attr(,&quot;dataClasses&quot;)
@@ -1615,7 +1615,7 @@ summary(dtModel)
 ## Features:  Class_Crew Class_1st Class_3rd Sex_Male Age_Adult Freq
 ## Feature importances:  (6,[4,5],[0.0821114369501465,0.9178885630498534])
 ## Max Depth:  2
-##  DecisionTreeClassificationModel (uid=dtc_b2f6b40224dc) of depth 2 with 7 nodes
+##  DecisionTreeClassificationModel (uid=dtc_a91780b990e4) of depth 2 with 7 nodes
 ##   If (feature 5 &lt;= 4.5)
 ##    If (feature 4 in {1.0})
 ##     Predict: 0.0
@@ -1652,7 +1652,7 @@ summary(gbtModel)
 ## Max Depth:  2
 ## Number of trees:  2
 ## Tree weights:  1 0.1
-##  GBTClassificationModel (uid=gbtc_c57a2a2d102f) with 2 trees
+##  GBTClassificationModel (uid=gbtc_01b98251e253) with 2 trees
 ##   Tree 0 (weight 1.0):
 ##     If (feature 5 &lt;= 4.5)
 ##      If (feature 4 in {1.0})
@@ -1701,7 +1701,7 @@ summary(rfModel)
 ## Max Depth:  2
 ## Number of trees:  2
 ## Tree weights:  1 1
-##  RandomForestClassificationModel (uid=rfc_60715e79bd90) with 2 trees
+##  RandomForestClassificationModel (uid=rfc_3209210af6d2) with 2 trees
 ##   Tree 0 (weight 1.0):
 ##     If (feature 5 &lt;= 0.5)
 ##      If (feature 3 in {0.0})
@@ -1796,30 +1796,30 @@ summary(gmmModel)
 </code></pre>
 
 <pre><code>## $lambda
-## [1] 0.5536208 0.4463792
+## [1] 0.5999779 0.4000221
 ## 
 ## $mu
 ## $mu[[1]]
-## [1] 1.429689 1.569165
+## [1] 1.372538 2.087232
 ## 
 ## $mu[[2]]
-## [1] 2.413790 2.296108
+## [1] 1.069200 3.697426
 ## 
 ## 
 ## $sigma
 ## $sigma[[1]]
 ##      [,1]     [,2]    
-## [1,] 1.67633  3.335639
-## [2,] 3.335639 7.063168
+## [1,] 2.991609 4.036564
+## [2,] 4.036564 5.484803
 ## 
 ## $sigma[[2]]
 ##      [,1]     [,2]    
-## [1,] 5.279463 2.719007
-## [2,] 2.719007 1.486211
+## [1,] 1.435663 1.811661
+## [2,] 1.811661 2.460751
 ## 
 ## 
 ## $loglik
-## [1] -31.77761
+## [1] -25.83922
 ## 
 ## $posterior
 ## SparkDataFrame[posterior:array&lt;double&gt;]
@@ -1832,13 +1832,13 @@ summary(gmmModel)
 head(select(gmmFitted, &quot;V1&quot;, &quot;V2&quot;, &quot;prediction&quot;))
 </code></pre>
 
-<pre><code>##            V1         V2 prediction
-## 1  0.87896096  0.4153526          0
-## 2 -0.04033495 -0.3142507          0
-## 3  0.14300284 -2.0576358          0
-## 4 -1.45542199  0.3614593          1
-## 5  4.88710614  3.9506910          1
-## 6  2.77808414  2.4819867          1
+<pre><code>##           V1         V2 prediction
+## 1  0.3985586  0.4988710          0
+## 2 -0.7099304  1.0805254          1
+## 3 -0.2178192  0.2796206          0
+## 4 -0.6789031 -0.8358662          0
+## 5  2.3229024  3.3997473          0
+## 6  2.6686351  5.2548486          1
 </code></pre>
 
 <h4>k-Means Clustering</h4>
@@ -1995,12 +1995,12 @@ head(posterior)
 ## 5 3 1 1 9 3 0 2 0 0 1 3
 ## 6 4 2 0 3 4 5 1 1 1 4 0
 ##                                       topicDistribution
-## 1 0.1972168, 0.1986637, 0.2022009, 0.2006592, 0.2012594
-## 2 0.1989981, 0.1988759, 0.2016026, 0.2006369, 0.1998866
-## 3 0.2020589, 0.2026099, 0.1968845, 0.1987297, 0.1997171
-## 4 0.2004073, 0.1981928, 0.2013019, 0.2006331, 0.1994649
-## 5 0.1971471, 0.1983961, 0.2023595, 0.2011584, 0.2009389
-## 6 0.2020246, 0.2041815, 0.1955392, 0.1997228, 0.1985320
+## 1 0.1972178, 0.1986653, 0.2022009, 0.2006584, 0.2012576
+## 2 0.1989978, 0.1988732, 0.2015976, 0.2006396, 0.1998918
+## 3 0.2020588, 0.2026110, 0.1968837, 0.1987296, 0.1997169
+## 4 0.2004053, 0.1981925, 0.2012999, 0.2006346, 0.1994678
+## 5 0.1971479, 0.1983946, 0.2023577, 0.2011601, 0.2009397
+## 6 0.2020202, 0.2041853, 0.1955392, 0.1997245, 0.1985308
 </code></pre>
 
 <pre><code class="r">perplexity &lt;- spark.perplexity(model, corpusDF)
@@ -2012,7 +2012,7 @@ perplexity
 
 <h4>Alternating Least Squares</h4>
 
-<p><code>spark.als</code> learns latent factors in <a href="https://en.wikipedia.org/wiki/Recommender_system#Collaborative_filtering">collaborative filtering</a> via <a href="http://dl.acm.org/citation.cfm?id=1608614">alternating least squares</a>.</p>
+<p><code>spark.als</code> learns latent factors in <a href="https://en.wikipedia.org/wiki/Recommender_system#Collaborative_filtering">collaborative filtering</a> via <a href="https://dl.acm.org/citation.cfm?id=1608614">alternating least squares</a>.</p>
 
 <p>There are multiple options that can be configured in <code>spark.als</code>, including <code>rank</code>, <code>reg</code>, and <code>nonnegative</code>. For a complete list, refer to the help file.</p>
 
@@ -2357,9 +2357,9 @@ head(sql(&quot;select * from aggregates&quot;))
 <h2>References</h2>
 
 <ul>
-<li><p><a href="http://spark.apache.org/docs/latest/cluster-overview.html">Spark Cluster Mode Overview</a></p></li>
-<li><p><a href="http://spark.apache.org/docs/latest/submitting-applications.html">Submitting Spark Applications</a></p></li>
-<li><p><a href="http://spark.apache.org/docs/latest/ml-guide.html">Machine Learning Library Guide (MLlib)</a></p></li>
+<li><p><a href="https://spark.apache.org/docs/latest/cluster-overview.html">Spark Cluster Mode Overview</a></p></li>
+<li><p><a href="https://spark.apache.org/docs/latest/submitting-applications.html">Submitting Spark Applications</a></p></li>
+<li><p><a href="https://spark.apache.org/docs/latest/ml-guide.html">Machine Learning Library Guide (MLlib)</a></p></li>
 <li><p><a href="https://people.csail.mit.edu/matei/papers/2016/sigmod_sparkr.pdf">SparkR: Scaling R Programs with Spark</a>, Shivaram Venkataraman, Zongheng Yang, Davies Liu, Eric Liang, Hossein Falaki, Xiangrui Meng, Reynold Xin, Ali Ghodsi, Michael Franklin, Ion Stoica, and Matei Zaharia. SIGMOD 2016. June 2016.</p></li>
 </ul>
 

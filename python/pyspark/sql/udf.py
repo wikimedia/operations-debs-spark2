@@ -24,6 +24,7 @@ from pyspark.rdd import _prepare_for_python_RDD, PythonEvalType, ignore_unicode_
 from pyspark.sql.column import Column, _to_java_column, _to_seq
 from pyspark.sql.types import StringType, DataType, StructType, _parse_datatype_string, \
     to_arrow_type, to_arrow_schema
+from pyspark.util import fail_on_stopiteration
 
 __all__ = ["UDFRegistration"]
 
@@ -40,10 +41,17 @@ def _create_udf(f, returnType, evalType):
     if evalType in (PythonEvalType.SQL_SCALAR_PANDAS_UDF,
                     PythonEvalType.SQL_GROUPED_MAP_PANDAS_UDF):
         import inspect
+        import sys
         from pyspark.sql.utils import require_minimum_pyarrow_version
 
         require_minimum_pyarrow_version()
-        argspec = inspect.getargspec(f)
+
+        if sys.version_info[0] < 3:
+            # `getargspec` is deprecated since python3.0 (incompatible with function annotations).
+            # See SPARK-23569.
+            argspec = inspect.getargspec(f)
+        else:
+            argspec = inspect.getfullargspec(f)
 
         if evalType == PythonEvalType.SQL_SCALAR_PANDAS_UDF and len(argspec.args) == 0 and \
                 argspec.varargs is None:
@@ -147,7 +155,8 @@ class UserDefinedFunction(object):
         spark = SparkSession.builder.getOrCreate()
         sc = spark.sparkContext
 
-        wrapped_func = _wrap_function(sc, self.func, self.returnType)
+        func = fail_on_stopiteration(self.func)
+        wrapped_func = _wrap_function(sc, func, self.returnType)
         jdt = spark._jsparkSession.parseDataType(self.returnType.json())
         judf = sc._jvm.org.apache.spark.sql.execution.python.UserDefinedPythonFunction(
             self._name, wrapped_func, jdt, self.evalType, self.deterministic)

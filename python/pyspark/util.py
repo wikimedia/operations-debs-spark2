@@ -15,6 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+from py4j.protocol import Py4JJavaError
 
 __all__ = []
 
@@ -33,9 +34,32 @@ def _exception_message(excp):
     >>> msg == _exception_message(excp)
     True
     """
+    if isinstance(excp, Py4JJavaError):
+        # 'Py4JJavaError' doesn't contain the stack trace available on the Java side in 'message'
+        # attribute in Python 2. We should call 'str' function on this exception in general but
+        # 'Py4JJavaError' has an issue about addressing non-ascii strings. So, here we work
+        # around by the direct call, '__str__()'. Please see SPARK-23517.
+        return excp.__str__()
     if hasattr(excp, "message"):
         return excp.message
     return str(excp)
+
+
+def fail_on_stopiteration(f):
+    """
+    Wraps the input function to fail on 'StopIteration' by raising a 'RuntimeError'
+    prevents silent loss of data when 'f' is used in a for loop
+    """
+    def wrapper(*args, **kwargs):
+        try:
+            return f(*args, **kwargs)
+        except StopIteration as exc:
+            raise RuntimeError(
+                "Caught StopIteration thrown from user's code; failing the task",
+                exc
+            )
+
+    return wrapper
 
 
 if __name__ == "__main__":
