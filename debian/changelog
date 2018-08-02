@@ -1,8 +1,8 @@
-spark2 (2.3.0-bin-hadoop2.6-3~jessie1) jessie-wikimedia; urgency=medium
+spark2 (2.3.1-bin-hadoop2.6-1~stretch1) stretch-wikimedia; urgency=medium
 
-  * Fix permissions on spark-thriftserver executable.
+  * 2.3.1 binary release for Hadoop 2.6
 
- -- Andrew Otto (WMF) <otto@wikimedia.org>  Thu, 05 Apr 2018 20:27:35 +0000
+ -- Andrew Otto <otto@wikimedia.org>  Thu, 02 Aug 2018 20:05:03 +0000
 
 spark2 (2.3.0-bin-hadoop2.6-2~stretch1) stretch-wikimedia; urgency=medium
 
