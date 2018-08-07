@@ -1,1 +1,2 @@
 etc/spark2/conf usr/lib/spark2/conf
+usr/lib/spark2/python/lib/py4j-0.10.7-src.zip usr/lib/spark2/python/lib/py4j-src.zip

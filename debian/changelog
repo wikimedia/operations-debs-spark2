@@ -1,3 +1,11 @@
+spark2 (2.3.1-bin-hadoop2.6-2~stretch1) stretch-wikimedia; urgency=medium
+
+  * Added versionless symlink for py4j so users of this package don't need to
+    update PYTHONPATHs if they launch pyspark without using the shell wrapper
+    (e.g. Jupyter Notebook iPython kernel).
+
+ -- Andrew Otto <otto@wikimedia.org>  Thu, 02 Aug 2018 20:05:03 +0000
+
 spark2 (2.3.1-bin-hadoop2.6-1~stretch1) stretch-wikimedia; urgency=medium
 
   * 2.3.1 binary release for Hadoop 2.6

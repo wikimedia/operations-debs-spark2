@@ -19,6 +19,10 @@ binary files that need to be included in the package. The following command shou
 
   find {jars,python/lib,yarn,R} -type f -exec file {} \; | grep -v text | awk -F ':' '{print $1}' | sort > debian/source/include-binaries
 
+You also may need to update the versionless py4j-src.zip symlink that spark2.links creates if the
+py4j version has changed. If you don't do this, it is possible that things like Jupyter Notebook
+pyspark2 kernels may break.
+
 Finally, to build --include-removal needs to be passed to dpkg-source so that any removed binaries
 will be removed from the source package.  You can do so by passing --source-option="--include-removal"
 to git-buildpackage or dpkg-buildpackage.  On a Wikimedia build server:
