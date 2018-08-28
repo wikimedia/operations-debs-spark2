@@ -11,13 +11,20 @@ This repository was created using git-import-orig:
   VERSION=${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}
   wget -P /tmp http://ftp.wayne.edu/apache/spark/spark-$SPARK_VERSION/spark-$VERSION.tgz
   gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-$VERSION.tgz
+  debian/extra/download_extras.sh # Download any extra binaries
 
 You should be able to import a new upstream release using the same command again.
+
+Note the download_extras.sh command. At the time of writing (2018-08), this command
+is only used to download pyarrow, a suggested library to help speed up use of Python
+and Spark.  Since it downloads a binary wheel, you should make sure you are running
+download_extras.sh on the same platform architecture you intend to install the
+spark2 package on.
 
 Once you've imported the Spark 2 tarball, you need to explicitly declare all
 binary files that need to be included in the package. The following command should do the trick.
 
-  find {jars,python/lib,yarn,R} -type f -exec file {} \; | grep -v text | awk -F ':' '{print $1}' | sort > debian/source/include-binaries
+  find {jars,python/lib,yarn,R,debian/extra} -type f -exec file {} \; | grep -v text | awk -F ':' '{print $1}' | sort > debian/source/include-binaries
 
 You also may need to update the versionless py4j-src.zip symlink that spark2.links creates if the
 py4j version has changed. If you don't do this, it is possible that things like Jupyter Notebook

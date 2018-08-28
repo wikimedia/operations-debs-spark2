@@ -35,3 +35,6 @@ override_dh_install:
 	# This can be used for spark.yarn.archive to avoid having to load
 	# all .jar files to HDFS everytime spark is launched.
 	zip -j $(CURDIR)/debian/spark2/usr/lib/spark2/spark2-assembly.zip $(CURDIR)/jars/*
+
+	# Install any extra Python wheels we want to ship with spark2.
+	find $(CURDIR)/debian/extra/python -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python \;
