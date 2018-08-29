@@ -74,3 +74,12 @@ fi
 if [ -z "${LD_LIBRARY_PATH}" -a -e /usr/lib/hadoop/lib/native ]; then
     export LD_LIBRARY_PATH=/usr/lib/hadoop/lib/native
 fi
+
+# Set default python to python3 and ipython3
+if [ -z "${PYSPARK_PYTHON}" -a -n "$(which python3)" ]; then
+    export PYSPARK_PYTHON=python3
+
+    if [ -z "${PYSPARK_DRIVER_PYTHON}" -a -n "$(which ipython3)" ]; then
+        export PYSPARK_DRIVER_PYTHON=ipython3
+    fi
+fi
