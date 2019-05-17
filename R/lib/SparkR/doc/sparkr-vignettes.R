@@ -18,6 +18,19 @@ Sys.setenv("_JAVA_OPTIONS" = paste("-XX:-UsePerfData", old_java_opt, sep = " "))
 library(SparkR)
 
 ## ---- include=FALSE------------------------------------------------------
+# disable eval if java version not supported
+override_eval <- tryCatch(!is.numeric(SparkR:::checkJavaVersion()),
+          error = function(e) { TRUE },
+          warning = function(e) { TRUE })
+
+if (override_eval) {
+  opts_hooks$set(eval = function(options) {
+    options$eval = FALSE
+    options
+  })
+}
+
+## ---- include=FALSE------------------------------------------------------
 install.spark()
 sparkR.session(master = "local[1]", sparkConfig = sparkSessionConfig, enableHiveSupport = FALSE)
 
@@ -246,6 +259,7 @@ summary(model)
 
 ## ------------------------------------------------------------------------
 prediction <- predict(model, training)
+head(select(prediction, "Class", "Sex", "Age", "Freq", "Survived", "prediction"))
 
 ## ------------------------------------------------------------------------
 t <- as.data.frame(Titanic)
@@ -255,6 +269,7 @@ summary(model)
 
 ## ------------------------------------------------------------------------
 fitted <- predict(model, training)
+head(select(fitted, "Class", "Sex", "Age", "Freq", "Survived", "prediction"))
 
 ## ------------------------------------------------------------------------
 t <- as.data.frame(Titanic)
@@ -267,7 +282,7 @@ summary(model)
 t <- as.data.frame(Titanic)
 training <- createDataFrame(t)
 # fit a Multilayer Perceptron Classification Model
-model <- spark.mlp(training, Survived ~ Age + Sex, blockSize = 128, layers = c(2, 3), solver = "l-bfgs", maxIter = 100, tol = 0.5, stepSize = 1, seed = 1, initialWeights = c( 0, 0, 0, 5, 5, 5, 9, 9, 9))
+model <- spark.mlp(training, Survived ~ Age + Sex, blockSize = 128, layers = c(2, 2), solver = "l-bfgs", maxIter = 100, tol = 0.5, stepSize = 1, seed = 1, initialWeights = c( 0, 0, 5, 5, 9, 9))
 
 ## ---- include=FALSE------------------------------------------------------
 ops <- options()
@@ -338,6 +353,7 @@ df <- createDataFrame(t)
 dtModel <- spark.decisionTree(df, Survived ~ ., type = "classification", maxDepth = 2)
 summary(dtModel)
 predictions <- predict(dtModel, df)
+head(select(predictions, "Class", "Sex", "Age", "Freq", "Survived", "prediction"))
 
 ## ------------------------------------------------------------------------
 t <- as.data.frame(Titanic)
@@ -345,6 +361,7 @@ df <- createDataFrame(t)
 gbtModel <- spark.gbt(df, Survived ~ ., type = "classification", maxDepth = 2, maxIter = 2)
 summary(gbtModel)
 predictions <- predict(gbtModel, df)
+head(select(predictions, "Class", "Sex", "Age", "Freq", "Survived", "prediction"))
 
 ## ------------------------------------------------------------------------
 t <- as.data.frame(Titanic)
@@ -352,6 +369,7 @@ df <- createDataFrame(t)
 rfModel <- spark.randomForest(df, Survived ~ ., type = "classification", maxDepth = 2, numTrees = 2)
 summary(rfModel)
 predictions <- predict(rfModel, df)
+head(select(predictions, "Class", "Sex", "Age", "Freq", "Survived", "prediction"))
 
 ## ------------------------------------------------------------------------
 t <- as.data.frame(Titanic)
