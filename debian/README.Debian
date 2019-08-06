@@ -6,22 +6,24 @@ https://spark.apache.org/downloads.html. It does not build Spark from source.
 
 This repository was created using git-import-orig:
 
-  SPARK_VERSION=2.3.0
+  SPARK_VERSION=2.3.1
   HADOOP_VERSION=2.6
   VERSION=${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}
   wget -P /tmp http://ftp.wayne.edu/apache/spark/spark-$SPARK_VERSION/spark-$VERSION.tgz
   gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-$VERSION.tgz
-  debian/extra/download_extras.sh # Download any extra binaries
+  debian/extra/download_python_dependences.sh # Download any extra binaries
+  git add debian/extra/python*
 
 You should be able to import a new upstream release using the same command again.
 
-Note the download_extras.sh command. At the time of writing (2018-08), this command
-is only used to download pyarrow, a suggested library to help speed up use of Python
-and Spark.  Since it downloads a binary wheel, you should make sure you are running
-download_extras.sh on the same platform architecture you intend to install the
-spark2 package on.
+Note the download_python_dependences.sh command. Some PySpark dependencies are
+binary C extensions, and as such need to be installed for the Python versions
+that PySpark will be run with.  These may not be the same as are installed via
+Debian.  This command will download the Python dependencies as wheel files, which
+will be unzipped during installation.  The PYTHONPATH will be set approriately
+to load these files at runtime in spark-env.sh.
 
-Once you've imported the Spark 2 tarball, you need to explicitly declare all
+Once you've imported the Spark 2 tarbal and downloaded dependencies, you need to explicitly declare all
 binary files that need to be included in the package. The following command should do the trick.
 
   find {jars,python/lib,yarn,R,debian/extra} -type f -exec file {} \; | grep -v text | awk -F ':' '{print $1}' | sort > debian/source/include-binaries
@@ -38,11 +40,6 @@ to git-buildpackage or dpkg-buildpackage.  On a Wikimedia build server:
 
 spark2-assembly.zip
 -------------------
-This package builds a spark2-assembly.zip archive from all files in the
-jars directory.  If an HDFS, client is avaliable, spark2-assembly.zip will be
+This package builds a spark-${SPARK_VERSION}-assembly.zip archive from all files in the
+jars directory.  If an HDFS, client is avaliable, spark assembly.zip will be
 uploaded to HDFS, and spark-defaults.conf will be configured to use it.
-
-If you are upgrading the spark2 package, you will need to reupload the assembly .zip
-file to HDFS manually:
-
-  sudo -u spark hdfs dfs -put -f /usr/lib/spark2/spark2-assembly.zip hdfs:///user/spark/share/lib/spark2-assembly.zip

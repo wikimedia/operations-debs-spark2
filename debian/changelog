@@ -1,3 +1,13 @@
+spark2 (2.3.1-bin-hadoop2.6-4) buster-wikimedia; urgency=medium
+
+  * Includes all python dependencies for both python 3.5 and 3.7
+  * Removes spark user and group on apt-get purge
+  * Versions spark assembly.zip in usr/lib/spark2/
+  * No longer installs spark assembly.zip in HDFS. This must be done
+    manually after install.
+
+ -- Andrew Otto <otto@wikimedia.org>  Tue, 06 Aug 2019 21:29:24 +0000
+
 spark2 (2.3.1-bin-hadoop2.6-3~stretch1) stretch-wikimedia; urgency=medium
 
   * Add extra installation of binary pyarrow 0.8.0.

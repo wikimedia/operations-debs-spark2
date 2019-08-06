@@ -1,5 +1,8 @@
 #!/usr/bin/make -f
 
+# default spark_version to version of spark-core .jar
+SPARK_VERSION ?= $(shell ls $(CURDIR)/jars/spark-core*.jar | sed 's/.*-\([0-9\.][0-9\.]*\).jar/\1/')
+
 %:
 	dh $@
 
@@ -34,7 +37,9 @@ override_dh_install:
 	# Create a spark2-assembly.zip archive that contains everything in jars/
 	# This can be used for spark.yarn.archive to avoid having to load
 	# all .jar files to HDFS everytime spark is launched.
-	zip -j $(CURDIR)/debian/spark2/usr/lib/spark2/spark2-assembly.zip $(CURDIR)/jars/*
+	zip -j $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-assembly.zip $(CURDIR)/jars/*
 
 	# Install any extra Python wheels we want to ship with spark2.
 	find $(CURDIR)/debian/extra/python -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python \;
+	find $(CURDIR)/debian/extra/python3.5 -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python3.5 \;
+	find $(CURDIR)/debian/extra/python3.7 -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python3.7 \;

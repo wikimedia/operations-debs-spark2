@@ -5,5 +5,7 @@ usr/lib/spark2
 usr/lib/spark2/bin
 usr/lib/spark2/jars
 usr/lib/spark2/python
+usr/lib/spark2/python3.5
+usr/lib/spark2/python3.7
 usr/lib/spark2/R
 usr/lib/spark2/yarn

@@ -8,11 +8,8 @@ set -e
 
 case "$1" in
     purge)
-        # spark2.postinst conditionally creates a spark user and /user/spark
-        # dir in HDFS, but spark2.postrm will not remove them.  This is because
-        # spark2 is meant to be installable alongside a spark 1 installation.
-        # We want to use the same spark user from that, so we can't be sure
-        # that we should be responsible for removing the spark user here.
+        deluser --quiet --system spark >/dev/null || true
+        deluser --quiet --group --system spark || true
 
         # Remove the hive-site.xml symlink if it exists
         test -e /etc/spark2/conf/hive-site.xml && unlink /etc/spark2/conf/hive-site.xml

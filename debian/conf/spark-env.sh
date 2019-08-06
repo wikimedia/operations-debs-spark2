@@ -83,3 +83,10 @@ if [ -z "${PYSPARK_PYTHON}" -a -n "$(which python3)" ]; then
         export PYSPARK_DRIVER_PYTHON=ipython3
     fi
 fi
+
+# If SPARK_HOME/pythonX.X exists, then insert it into the front of PYTHONPATH
+# So any provided packages override system installed ones.
+python_version_path=${SPARK_HOME}/$(${PYSPARK_PYTHON} -c 'import sys; print("python{}.{}".format(sys.version_info.major, sys.version_info.minor))')
+if [ -d "${python_version_path}" ]; then
+    PYTHONPATH="${python_version_path}:${PYTHONPATH}"
+fi
