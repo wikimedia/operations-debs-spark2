@@ -1,3 +1,11 @@
+spark2 (2.4.3-bin-hadoop2.6-1) buster-wikimedia; urgency=medium
+
+  * Spark 2.4.3 release
+  * Include python 'assembly' zip files for python3.5 and python3.7
+    to ease upgrade testing.
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Mon, 26 Aug 2019 20:11:03 +0000
+
 spark2 (2.3.1-bin-hadoop2.6-4) buster-wikimedia; urgency=medium
 
   * Includes all python dependencies for both python 3.5 and 3.7

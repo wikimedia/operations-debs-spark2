@@ -12,6 +12,6 @@ Depends: java8-runtime-headless, ${misc:Depends}, python3-all
 Description: Spark 2
  This is a binary distribution of Spark 2.  This package can be installed
  alongside of an existing Spark 1 installation.  Spark executables are renamed
- to have 'spark2' in the name.  This package only installs libary files and
+ to have 'spark2' in the name.  This package only installs library files and
  executable scripts; it does not include init scripts to run Spark daemons
  in standalone mode.

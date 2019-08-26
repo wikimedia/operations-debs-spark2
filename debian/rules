@@ -43,3 +43,13 @@ override_dh_install:
 	find $(CURDIR)/debian/extra/python -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python \;
 	find $(CURDIR)/debian/extra/python3.5 -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python3.5 \;
 	find $(CURDIR)/debian/extra/python3.7 -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python3.7 \;
+
+	# Also create 'python assembly' zip files.  These can be used when running pyspark in YARN
+	# as the --archives argument.  This will allow you to run this version of pyspark
+	# with expected extra dependencies in a distributed environment, without having to
+	# also install this debian package everywhere.  Hopefully this will ease in upgrade
+	# testing.  To use, install and launch pyspark with e.g.
+	#  --master yarn --archives '/usr/lib/spark2/spark-2.4.3-python3.5.zip#spark-2.4.3-python3.5'  --conf 'spark.executorEnv.PYTHONPATH=spark-2.4.3-python3.5'
+	cd $(CURDIR)/debian/spark2/usr/lib/spark2/python && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.5.zip ./* && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.7.zip ./*
+	cd $(CURDIR)/debian/spark2/usr/lib/spark2/python3.5 && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.5.zip ./*
+	cd $(CURDIR)/debian/spark2/usr/lib/spark2/python3.7 && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.7.zip ./*

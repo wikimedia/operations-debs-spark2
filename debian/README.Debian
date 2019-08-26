@@ -6,12 +6,12 @@ https://spark.apache.org/downloads.html. It does not build Spark from source.
 
 This repository was created using git-import-orig:
 
-  SPARK_VERSION=2.3.1
+  SPARK_VERSION=2.4.3
   HADOOP_VERSION=2.6
   VERSION=${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}
   wget -P /tmp http://ftp.wayne.edu/apache/spark/spark-$SPARK_VERSION/spark-$VERSION.tgz
   gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-$VERSION.tgz
-  debian/extra/download_python_dependences.sh # Download any extra binaries
+  debian/extra/download_python_dependencies.sh # Download any extra binaries
   git add debian/extra/python*
 
 You should be able to import a new upstream release using the same command again.
@@ -23,7 +23,7 @@ Debian.  This command will download the Python dependencies as wheel files, whic
 will be unzipped during installation.  The PYTHONPATH will be set approriately
 to load these files at runtime in spark-env.sh.
 
-Once you've imported the Spark 2 tarbal and downloaded dependencies, you need to explicitly declare all
+Once you've imported the Spark 2 tarball and downloaded dependencies, you need to explicitly declare all
 binary files that need to be included in the package. The following command should do the trick.
 
   find {jars,python/lib,yarn,R,debian/extra} -type f -exec file {} \; | grep -v text | awk -F ':' '{print $1}' | sort > debian/source/include-binaries
@@ -36,10 +36,26 @@ Finally, to build --include-removal needs to be passed to dpkg-source so that an
 will be removed from the source package.  You can do so by passing --source-option="--include-removal"
 to git-buildpackage or dpkg-buildpackage.  On a Wikimedia build server:
 
-  GIT_PBUILDER_AUTOCONF=no DIST=stretch WIKIMEDIA=yes gbp buildpackage -sa -us -uc --git-builder=git-pbuilder --source-option="--include-removal"
+  GIT_PBUILDER_AUTOCONF=no DIST=buster WIKIMEDIA=yes gbp buildpackage -sa -us -uc --git-builder=git-pbuilder --source-option="--include-removal"
 
-spark2-assembly.zip
--------------------
+spark-*-assembly.zip
+--------------------
 This package builds a spark-${SPARK_VERSION}-assembly.zip archive from all files in the
-jars directory.  If an HDFS, client is avaliable, spark assembly.zip will be
-uploaded to HDFS, and spark-defaults.conf will be configured to use it.
+jars directory.  This should be manually installed into HDFS and the value of
+spark.yarn.archive should be set in spark-defaults.conf.
+
+spark-*-pythonX.Y.zip
+---------------------
+THis package builds .zip files containing python version specific dependencies
+collected from the file downloaded in extras.  By default, pyspark will
+include the proper dependencies found in usr/lib/spark2/pythonX.Y.  However,
+if you are installing this package in a distributed environment, you may need
+to support an incremental upgrade.  In this case, you can submit the appropriate
+python .zip file along with a job in order to use same python dependencies you have
+on your client in remote executors.  To ensure that the proper python dependencies are
+shipped from your client, add
+  --archives "/usr/lib/spark2/spark-${SPARK_VERSION}-pythonX.Y.zip#spark-${SPARK_VERSION}-pythonX.Y" \
+  --conf "spark.executorEnv.PYTHONPATH=spark-${SPARK_VERSION}-pythonX.Y"
+to your pyspark2 or spark2-submit command.
+Note that we can't use --py-files here, as python cannot load compiled modules from .zip files.
+The .zip file must be extracted (via --archives) and then added to the executor's PYTHONPATH.

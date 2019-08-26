@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# list of packages...requirements, no just pyspark[sql] to get dependencies.
-# for each python version.
-# mv none-any .whls to python/
-# mv cp3* to python3.5/, python3.7/, etc.
-# auto-add current python runtime version to PYTHONPATH in spark-env.sh
-#
-
-
 # We want to ship all pyspark dependencies with the spark package itself.
 # There are version discrepencies and between versions of python, spark and
 # debian that are difficult to resolve.  The easiest thing to do is just
