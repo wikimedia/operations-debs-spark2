@@ -1,3 +1,9 @@
+spark2 (2.4.4-bin-hadoop2.6-1) buster-wikimedia; urgency=medium
+
+  * Spark 2.4.4 release.
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Sun, 06 Oct 2019 02:40:44 +0000
+
 spark2 (2.4.3-bin-hadoop2.6-1) buster-wikimedia; urgency=medium
 
   * Spark 2.4.3 release
