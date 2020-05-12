@@ -1,3 +1,10 @@
+spark2 (2.4.4-bin-hadoop2.6-2) buster-wikimedia; urgency=medium
+
+  * Add bash shabang to all bin scripts to avoid exec format errors
+    when executing them via Python's subprocess.
+
+ -- Luca Toscano (WMF) <ltoscano@wikimedia.org>  Tue, 12 May 2020 06:40:44 +0000
+
 spark2 (2.4.4-bin-hadoop2.6-1) buster-wikimedia; urgency=medium
 
   * Spark 2.4.4 release.
