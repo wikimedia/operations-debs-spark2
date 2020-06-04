@@ -77,11 +77,19 @@ fi
 
 # Set default python to python3 and ipython3
 if [ -z "${PYSPARK_PYTHON}" -a -n "$(which python3)" ]; then
-    export PYSPARK_PYTHON=python3
+    # We want PYSPARK_PYTHON to default to the versioned python
+    # executable on the node where spark is being launched.
+    # E.g. on Stretch we want python3.5 and on Buster we want python3.7.
+    # This will cause the versions of python that is used on driver
+    # and on workers to be the same.
+    # https://phabricator.wikimedia.org/T229347#5439259
+    export PYSPARK_PYTHON="$(basename $(realpath $(which python3)))"
+fi
 
-    if [ -z "${PYSPARK_DRIVER_PYTHON}" -a -n "$(which ipython3)" ]; then
-        export PYSPARK_DRIVER_PYTHON=ipython3
-    fi
+# Default PYSPARK_DRIVER_PYTHON to PYSPARK_PYTHON.
+# Override this to e.g. ipython3 if you want to use ipython as your driver REPL.
+if [ -z "${PYSPARK_DRIVER_PYTHON}" ]; then
+    export PYSPARK_DRIVER_PYTHON=$PYSPARK_PYTHON
 fi
 
 # If SPARK_HOME/pythonX.X exists, then insert it into the front of PYTHONPATH

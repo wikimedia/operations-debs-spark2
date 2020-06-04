@@ -1,3 +1,11 @@
+spark2 (2.4.4-bin-hadoop2.6-3) buster-wikimedia; urgency=medium
+
+  * Default PYSPARK_PYTHON to exact versioned python executable used
+    on driver.  This default makes sure driver and workers use the same
+    python version.
+
+ -- Andrew Otto (WMF) <otto@wikimedia.org>  Thu, 4 Jun 2020 15:50:14 +0000
+
 spark2 (2.4.4-bin-hadoop2.6-2) buster-wikimedia; urgency=medium
 
   * Add bash shabang to all bin scripts to avoid exec format errors
