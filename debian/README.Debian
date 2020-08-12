@@ -6,11 +6,11 @@ https://spark.apache.org/downloads.html. It does not build Spark from source.
 
 This repository was created using git-import-orig:
 
-  SPARK_VERSION=2.4.3
+  SPARK_VERSION=2.4.4
   HADOOP_VERSION=2.6
   VERSION=${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}
-  wget -P /tmp http://ftp.wayne.edu/apache/spark/spark-$SPARK_VERSION/spark-$VERSION.tgz
-  gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-$VERSION.tgz
+  wget -P /tmp https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${VERSION}.tgz
+  gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-${VERSION}.tgz
   debian/extra/download_python_dependencies.sh # Download any extra binaries
   git add debian/extra/python*
 
