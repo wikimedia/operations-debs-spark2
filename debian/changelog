@@ -1,3 +1,9 @@
+spark2 (2.4.4-bin-hadoop2.6-4~wmfhadoop2.10.1) buster-wikimedia; urgency=medium
+
+  * Spark 2.4.4 with manually included Hadoop 2.10.1 dependencies.
+
+ -- Andrew Otto <otto@deneb.codfw.wmnet>  Wed, 17 Feb 2021 19:47:31 +0000
+
 spark2 (2.4.4-bin-hadoop2.6-3) buster-wikimedia; urgency=medium
 
   * Default PYSPARK_PYTHON to exact versioned python executable used

@@ -4,29 +4,20 @@ Spark2 for Debian
 This package is created from the release tarballs provided from
 https://spark.apache.org/downloads.html. It does not build Spark from source.
 
-This repository was created using git-import-orig:
+To import a new Spark distribution version, do the following:
 
-  SPARK_VERSION=2.4.4
-  HADOOP_VERSION=2.6
-  VERSION=${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}
-  wget -P /tmp https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${VERSION}.tgz
-  gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-${VERSION}.tgz
-  debian/extra/download_python_dependencies.sh # Download any extra binaries
-  git add debian/extra/python*
+  export SPARK_VERSION=2.4.4
+  export SPARK_HADOOP_VERSION=2.6
+  # Only set this if different than SPARK_HADOOP_VERSION.  If this is set,
+  # The hadoop jar dependencies will be replaced with this version when preparing the build.
+  export WMF_HADDOP_VERSION=2.10.1
 
-You should be able to import a new upstream release using the same command again.
+  SPARK_DIST_VERSION=${SPARK_VERSION}-bin-hadoop${SPARK_HADOOP_VERSION}
+  wget -P /tmp https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_DIST_VERSION}.tgz
+  gbp import-orig -u $VERSION --upstream-branch=master --debian-branch=debian /tmp/spark-${SPARK_DIST_VERSION}.tgz
 
-Note the download_python_dependences.sh command. Some PySpark dependencies are
-binary C extensions, and as such need to be installed for the Python versions
-that PySpark will be run with.  These may not be the same as are installed via
-Debian.  This command will download the Python dependencies as wheel files, which
-will be unzipped during installation.  The PYTHONPATH will be set approriately
-to load these files at runtime in spark-env.sh.
-
-Once you've imported the Spark 2 tarball and downloaded dependencies, you need to explicitly declare all
-binary files that need to be included in the package. The following command should do the trick.
-
-  find {jars,python/lib,yarn,R,debian/extra} -type f -exec file {} \; | grep -v text | awk -F ':' '{print $1}' | sort > debian/source/include-binaries
+  # Download extra dependencies we want to include.
+  debian/extra/prepare_build.sh
 
 You also may need to update the versionless py4j-src.zip symlink that spark2.links creates if the
 py4j version has changed. If you don't do this, it is possible that things like Jupyter Notebook
@@ -37,6 +28,19 @@ will be removed from the source package.  You can do so by passing --source-opti
 to git-buildpackage or dpkg-buildpackage.  On a Wikimedia build server:
 
   GIT_PBUILDER_AUTOCONF=no DIST=buster WIKIMEDIA=yes gbp buildpackage -sa -us -uc --git-builder=git-pbuilder --source-option="--include-removal"
+
+
+Hadoop Versions
+---------------
+
+Spark 2 distributions are available with included Hadoop dependencies, as well as without.
+The Spark 2 dists without Hadoop are missing some other crucial spark related things that we need,
+including Hive.  We could possibly make a custom build from source.
+
+For now, the .deb that this builds will manually replace the Hadoop dependencies in the Spark
+dist with the Hadoop dependences at the version WMF runs (if WMF_HADOOP_VERSION is set).
+
+More detail can be found in the various scripts called by prepare_build.sh.
 
 spark-*-assembly.zip
 --------------------

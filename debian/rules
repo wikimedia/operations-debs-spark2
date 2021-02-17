@@ -10,7 +10,12 @@ override_dh_install:
 	dh_install
 
 	# Copy libs into usr/lib/spark2/
-	cp -rv $(CURDIR)/jars/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
+	# If debian/extra/hadoop exists, assume we want to skip all Spark dist provided jars/hadoop-*.jar, else just copy all jars/
+	(test -d $(CURDIR)/debian/extra/hadoop && find jars -not -name 'hadoop-*.jar' -exec cp -v {} $(CURDIR)/debian/spark2/usr/lib/spark2/jars/ \;) || cp -v $(CURDIR)/jars/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
+	#cp -rv $(CURDIR)/jars/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
+	# If debian/extra/hadoop exists, copy the hadoop jars from there.
+	test -d $(CURDIR)/debian/extra/hadoop && cp -v $(CURDIR)/debian/extra/hadoop/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
+
 	cp -rv $(CURDIR)/R/* $(CURDIR)/debian/spark2/usr/lib/spark2/R/
 	cp -rv $(CURDIR)/yarn/* 	$(CURDIR)/debian/spark2/usr/lib/spark2/yarn/
 	# (Avoid copying python test files by specifying the files we want from python/ directory.)
@@ -34,10 +39,10 @@ override_dh_install:
 	cp -v $(CURDIR)/bin/spark-submit      $(CURDIR)/debian/spark2/usr/lib/spark2/bin/spark-submit
 	cp -v $(CURDIR)/bin/sparkR            $(CURDIR)/debian/spark2/usr/lib/spark2/bin/sparkR
 
-	# Create a spark2-assembly.zip archive that contains everything in jars/
+	# Create a spark2-assembly.zip archive that contains everything in usr/lib/spark2/jars
 	# This can be used for spark.yarn.archive to avoid having to load
 	# all .jar files to HDFS everytime spark is launched.
-	zip -j $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-assembly.zip $(CURDIR)/jars/*
+	zip -j $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-assembly.zip $(CURDIR)/debian/spark2/usr/lib/spark2/jars/*
 
 	# Install any extra Python wheels we want to ship with spark2.
 	find $(CURDIR)/debian/extra/python -name "*.whl" -exec unzip {} -d $(CURDIR)/debian/spark2/usr/lib/spark2/python \;
@@ -53,3 +58,4 @@ override_dh_install:
 	cd $(CURDIR)/debian/spark2/usr/lib/spark2/python && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.5.zip ./* && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.7.zip ./*
 	cd $(CURDIR)/debian/spark2/usr/lib/spark2/python3.5 && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.5.zip ./*
 	cd $(CURDIR)/debian/spark2/usr/lib/spark2/python3.7 && zip -r $(CURDIR)/debian/spark2/usr/lib/spark2/spark-$(SPARK_VERSION)-python3.7.zip ./*
+
