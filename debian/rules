@@ -9,12 +9,9 @@ SPARK_VERSION ?= $(shell ls $(CURDIR)/jars/spark-core*.jar | sed 's/.*-\([0-9\.]
 override_dh_install:
 	dh_install
 
-	# Copy libs into usr/lib/spark2/
-	# If debian/extra/hadoop exists, assume we want to skip all Spark dist provided jars/hadoop-*.jar, else just copy all jars/
-	(test -d $(CURDIR)/debian/extra/hadoop && find jars -not -name 'hadoop-*.jar' -exec cp -v {} $(CURDIR)/debian/spark2/usr/lib/spark2/jars/ \;) || cp -v $(CURDIR)/jars/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
-	#cp -rv $(CURDIR)/jars/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
-	# If debian/extra/hadoop exists, copy the hadoop jars from there.
-	test -d $(CURDIR)/debian/extra/hadoop && cp -v $(CURDIR)/debian/extra/hadoop/* $(CURDIR)/debian/spark2/usr/lib/spark2/jars/
+	# Copy libs into usr/lib/spark2/, excluding hadoop-* jars.
+	# Hadoop is expected to be provided elsewhere if needed.
+	find jars -not -name 'hadoop-*.jar' -exec cp -v {} $(CURDIR)/debian/spark2/usr/lib/spark2/jars/ \;
 
 	cp -rv $(CURDIR)/R/* $(CURDIR)/debian/spark2/usr/lib/spark2/R/
 	cp -rv $(CURDIR)/yarn/* 	$(CURDIR)/debian/spark2/usr/lib/spark2/yarn/

@@ -10,13 +10,6 @@ extra_dir=$(dirname $(realpath $0))
 # to load these files at runtime in spark-env.sh.
 ${extra_dir}/download_python_dependencies.sh
 
-# download_hadoop_dependencies.sh will download different versions of Hadoop dependency
-# jars into debian/extra/hadoop.  This is only necessary if the version of Hadoop in your cluster
-# is different than the one provided in the Spark dist.  Read the docs of that script or more info.
-# If debian/extra/hadoop exists during the build,
+# Find binary files we're going to include in the .deb and list then in include-binaries.
+${extra_dir}/find_included_binaries.sh | sort > debian/source/include-binaries
 
-if [ -n "${WMF_HADOOP_VERSION}" ]; then
-    ${extra_dir}/download_hadoop_dependencies.sh ${WMF_HADOOP_VERSION}
-fi
-
-${extra_dir}/find_included_binaries.sh

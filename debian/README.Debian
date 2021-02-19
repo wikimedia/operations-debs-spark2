@@ -9,8 +9,6 @@ To import a new Spark distribution version, do the following:
   export SPARK_VERSION=2.4.4
   export SPARK_HADOOP_VERSION=2.6
   # Only set this if different than SPARK_HADOOP_VERSION.  If this is set,
-  # The hadoop jar dependencies will be replaced with this version when preparing the build.
-  export WMF_HADDOP_VERSION=2.10.1
 
   SPARK_DIST_VERSION=${SPARK_VERSION}-bin-hadoop${SPARK_HADOOP_VERSION}
   wget -P /tmp https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_DIST_VERSION}.tgz
@@ -37,10 +35,10 @@ Spark 2 distributions are available with included Hadoop dependencies, as well a
 The Spark 2 dists without Hadoop are missing some other crucial spark related things that we need,
 including Hive.  We could possibly make a custom build from source.
 
-For now, the .deb that this builds will manually replace the Hadoop dependencies in the Spark
-dist with the Hadoop dependences at the version WMF runs (if WMF_HADOOP_VERSION is set).
-
-More detail can be found in the various scripts called by prepare_build.sh.
+For now, this will build Hadoop-less Spark .deb package from a Hadoop-full Spark distribution
+by removing the hadoop-* jars from the .deb.  At runtime, spark-env.sh will add system installed
+Hadoop dependencies automatically by setting SPARK_DIST_CLASSPATH=$(hadoop classpath).
+See: https://spark.apache.org/docs/2.4.4/hadoop-provided.html
 
 spark-*-assembly.zip
 --------------------

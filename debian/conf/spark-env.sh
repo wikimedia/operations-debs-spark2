@@ -70,6 +70,12 @@ if [ -z "${HADOOP_CONF_DIR}" -a -e "/etc/hadoop/conf" ]; then
   export HADOOP_CONF_DIR=/etc/hadoop/conf
 fi
 
+# If hadoop command is execultable, then use it to add Hadoop jars to Spark's runtime classpath.
+# See: https://spark.apache.org/docs/2.4.4/hadoop-provided.html
+if [ -x "$(command -v hadoop)" ]; then
+    SPARK_DIST_CLASSPATH=$(hadoop classpath)
+fi
+
 # If /usr/lib/hadoop/native exists, use Hadoop native libs from there
 if [ -z "${LD_LIBRARY_PATH}" -a -e /usr/lib/hadoop/lib/native ]; then
     export LD_LIBRARY_PATH=/usr/lib/hadoop/lib/native
